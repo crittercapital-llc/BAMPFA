@@ -1,0 +1,801 @@
+date,rating,sentiment,source,text
+2022-01-02,1,Negative,Yelp,A little pricey but the quality is always there. Loved the Beau Travail screening.
+2022-01-07,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-01-14,3,Neutral,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-01-19,3,Neutral,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2022-01-20,5,Positive,Google,The gallery spaces are beautifully curated. Ana Mendieta: Traces was my favorite show this year.
+2022-01-26,4,Positive,Yelp,The Tauba Auerbach: S v Z exhibition challenged me in the best way. Will be back next month.
+2022-01-30,5,Positive,Yelp,The gallery spaces are beautifully curated. Radical Presence: Black Performance in Contemporary Art was my favorite show this year.
+2022-02-02,4,Positive,Google,Not my usual style of art but Uncanny Valley: Being Human in the Age of AI really opened my mind. Impressive curation.
+2022-02-03,3,Neutral,Google,Not my usual style of art but Radical Presence: Black Performance in Contemporary Art really opened my mind. Impressive curation.
+2022-02-04,4,Positive,Google,Not my usual style of art but Uncanny Valley: Being Human in the Age of AI really opened my mind. Impressive curation.
+2022-02-05,5,Positive,Google,A little pricey but the quality is always there. Loved the Tropical Malady screening.
+2022-02-06,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-02-08,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-02-09,4,Positive,Yelp,Great film programming. Caught a rare 35mm screening of First Cow. Pure cinema magic.
+2022-02-10,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2022-02-12,5,Positive,Yelp,"A little pricey but the quality is always there. Loved the Jeanne Dielman, 23 quai du Commerce screening."
+2022-02-18,3,Neutral,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-02-21,3,Neutral,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-02-22,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Tropical Malady. Pure cinema magic.
+2022-02-27,4,Positive,Google,Good variety of art and film. Radical Presence: Black Performance in Contemporary Art was a bit dense but rewarding.
+2022-02-28,3,Neutral,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2022-03-02,5,Positive,Yelp,The Bay Area Now 9 exhibition challenged me in the best way. Will be back next month.
+2022-03-03,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-03-05,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-03-06,1,Negative,Google,The gallery spaces are beautifully curated. Tauba Auerbach: S v Z was my favorite show this year.
+2022-03-06,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Synonyms. Pure cinema magic.
+2022-03-06,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-03-06,4,Positive,Google,"Wonderful museum in the heart of Berkeley. The Paper, Scissors, Stone: Contemporary Japanese Prints show was breathtaking."
+2022-03-08,2,Negative,Yelp,A little pricey but the quality is always there. Loved the Decision to Leave screening.
+2022-03-09,5,Positive,Google,Good variety of art and film. Ana Mendieta: Traces was a bit dense but rewarding.
+2022-03-10,5,Positive,Yelp,Good variety of art and film. Uncanny Valley: Being Human in the Age of AI was a bit dense but rewarding.
+2022-03-14,1,Negative,Google,One of the best film archives on the West Coast. Yi Yi (A One and a Two) on the big screen was a dream.
+2022-03-16,2,Negative,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2022-03-18,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-03-18,2,Negative,Yelp,One of the best film archives on the West Coast. Platform (Zhantai) on the big screen was a dream.
+2022-03-18,5,Positive,Google,BAMPFA always delivers. Saw Past Lives here — stunning print on the big screen.
+2022-03-19,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-03-20,2,Negative,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-03-22,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-03-23,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Ant Farm: 1968–1978 show was breathtaking.
+2022-03-27,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2022-03-29,4,Positive,Yelp,The Uncanny Valley: Being Human in the Age of AI exhibition challenged me in the best way. Will be back next month.
+2022-03-29,2,Negative,Google,BAMPFA always delivers. Saw All of Us Strangers here — stunning print on the big screen.
+2022-03-29,2,Negative,Yelp,One of the best film archives on the West Coast. Platform (Zhantai) on the big screen was a dream.
+2022-03-31,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-04-01,5,Positive,Google,The gallery spaces are beautifully curated. Uncanny Valley: Being Human in the Age of AI was my favorite show this year.
+2022-04-02,2,Negative,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-04-05,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-04-08,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2022-04-09,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-04-09,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-04-13,4,Positive,Yelp,Not my usual style of art but Dorothea Lange: Politics of Seeing really opened my mind. Impressive curation.
+2022-04-16,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-04-18,3,Neutral,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-04-18,4,Positive,Google,Good variety of art and film. Ana Mendieta: Traces was a bit dense but rewarding.
+2022-04-20,1,Negative,Yelp,"Wonderful museum in the heart of Berkeley. The Paper, Scissors, Stone: Contemporary Japanese Prints show was breathtaking."
+2022-04-21,5,Positive,Google,One of the best film archives on the West Coast. The Worst Person in the World on the big screen was a dream.
+2022-04-28,3,Neutral,Google,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2022-04-29,4,Positive,Google,The gallery spaces are beautifully curated. Dorothea Lange: Politics of Seeing was my favorite show this year.
+2022-05-06,4,Positive,Google,The Jockum Nordström: The Lonely Ones exhibition challenged me in the best way. Will be back next month.
+2022-05-17,4,Positive,Yelp,Good variety of art and film. Theaster Gates: Black Image Corporation was a bit dense but rewarding.
+2022-05-18,5,Positive,Google,Not my usual style of art but Ant Farm: 1968–1978 really opened my mind. Impressive curation.
+2022-05-19,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-05-25,5,Positive,Yelp,"The Paper, Scissors, Stone: Contemporary Japanese Prints exhibition challenged me in the best way. Will be back next month."
+2022-05-26,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-05-26,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-05-29,5,Positive,Google,A little pricey but the quality is always there. Loved the Tropical Malady screening.
+2022-06-01,3,Neutral,Yelp,The gallery spaces are beautifully curated. Bay Area Now 9 was my favorite show this year.
+2022-06-01,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-06-02,4,Positive,Google,Good variety of art and film. Defne Ayas: Threshold was a bit dense but rewarding.
+2022-06-05,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-06-05,5,Positive,Yelp,A little pricey but the quality is always there. Loved the In the Mood for Love screening.
+2022-06-09,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-06-19,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Cache (Hidden). Pure cinema magic.
+2022-06-20,3,Neutral,Google,Good variety of art and film. Theaster Gates: Black Image Corporation was a bit dense but rewarding.
+2022-06-20,4,Positive,Google,Good variety of art and film. Ana Mendieta: Traces was a bit dense but rewarding.
+2022-06-21,2,Negative,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-06-23,4,Positive,Google,Not my usual style of art but Mildred Howard: Room Tone really opened my mind. Impressive curation.
+2022-06-28,5,Positive,Google,"Wonderful museum in the heart of Berkeley. The Paper, Scissors, Stone: Contemporary Japanese Prints show was breathtaking."
+2022-06-30,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-07-01,5,Positive,Yelp,One of the best film archives on the West Coast. Past Lives on the big screen was a dream.
+2022-07-02,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2022-07-06,5,Positive,Yelp,Good variety of art and film. Barry McGee: Point the Finger was a bit dense but rewarding.
+2022-07-06,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-07-17,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Portrait of a Lady on Fire screening.
+2022-07-22,5,Positive,Google,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2022-07-22,4,Positive,Google,"Great film programming. Caught a rare 35mm screening of Jeanne Dielman, 23 quai du Commerce. Pure cinema magic."
+2022-07-25,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-07-29,4,Positive,Yelp,The Ana Mendieta: Traces exhibition challenged me in the best way. Will be back next month.
+2022-07-29,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-08-04,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-08-06,4,Positive,Google,BAMPFA always delivers. Saw The Zone of Interest here — stunning print on the big screen.
+2022-08-06,5,Positive,Google,BAMPFA always delivers. Saw Beau Travail here — stunning print on the big screen.
+2022-08-10,1,Negative,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-08-12,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-08-15,5,Positive,Google,BAMPFA always delivers. Saw First Cow here — stunning print on the big screen.
+2022-08-17,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2022-08-19,5,Positive,Yelp,A little pricey but the quality is always there. Loved the In the Mood for Love screening.
+2022-08-23,3,Neutral,Google,A little pricey but the quality is always there. Loved the The Worst Person in the World screening.
+2022-09-01,4,Positive,Yelp,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2022-09-03,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-09-07,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-09-07,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-09-09,5,Positive,Yelp,One of the best film archives on the West Coast. Decision to Leave on the big screen was a dream.
+2022-09-11,1,Negative,Google,Great film programming. Caught a rare 35mm screening of In the Mood for Love. Pure cinema magic.
+2022-09-15,5,Positive,Google,Good variety of art and film. Bay Area Now 9 was a bit dense but rewarding.
+2022-09-21,5,Positive,Google,The Bay Area Now 9 exhibition challenged me in the best way. Will be back next month.
+2022-09-27,3,Neutral,Google,One of the best film archives on the West Coast. First Cow on the big screen was a dream.
+2022-09-28,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-10-01,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-10-02,4,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2022-10-04,3,Neutral,Google,The gallery spaces are beautifully curated. Jockum Nordström: The Lonely Ones was my favorite show this year.
+2022-10-04,2,Negative,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-10-06,2,Negative,Google,Good variety of art and film. Jockum Nordström: The Lonely Ones was a bit dense but rewarding.
+2022-10-06,2,Negative,Yelp,Great film programming. Caught a rare 35mm screening of Synonyms. Pure cinema magic.
+2022-10-08,1,Negative,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-10-08,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Platform (Zhantai). Pure cinema magic.
+2022-10-09,5,Positive,Yelp,A little pricey but the quality is always there. Loved the In the Mood for Love screening.
+2022-10-11,5,Positive,Yelp,BAMPFA always delivers. Saw Beau Travail here — stunning print on the big screen.
+2022-10-16,2,Negative,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-10-18,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-10-20,5,Positive,Google,BAMPFA always delivers. Saw The Assassin here — stunning print on the big screen.
+2022-10-22,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-10-23,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Theaster Gates: Black Image Corporation show was breathtaking.
+2022-10-23,4,Positive,Google,The Theaster Gates: Black Image Corporation exhibition challenged me in the best way. Will be back next month.
+2022-10-25,3,Neutral,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-10-25,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Cache (Hidden) screening.
+2022-10-28,5,Positive,Yelp,One of the best film archives on the West Coast. Decision to Leave on the big screen was a dream.
+2022-10-30,4,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2022-10-31,2,Negative,Google,BAMPFA always delivers. Saw Synonyms here — stunning print on the big screen.
+2022-10-31,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-11-07,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2022-11-08,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-11-08,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2022-11-08,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-11-08,2,Negative,Yelp,One of the best film archives on the West Coast. Aftersun on the big screen was a dream.
+2022-11-09,5,Positive,Yelp,A little pricey but the quality is always there. Loved the The Zone of Interest screening.
+2022-11-10,4,Positive,Google,"Good variety of art and film. Paper, Scissors, Stone: Contemporary Japanese Prints was a bit dense but rewarding."
+2022-11-12,4,Positive,Yelp,Not my usual style of art but Barry McGee: Point the Finger really opened my mind. Impressive curation.
+2022-11-13,4,Positive,Google,"The Paper, Scissors, Stone: Contemporary Japanese Prints exhibition challenged me in the best way. Will be back next month."
+2022-11-13,2,Negative,Google,BAMPFA always delivers. Saw Platform (Zhantai) here — stunning print on the big screen.
+2022-11-14,5,Positive,Yelp,Good variety of art and film. Defne Ayas: Threshold was a bit dense but rewarding.
+2022-11-14,5,Positive,Yelp,Not my usual style of art but Defne Ayas: Threshold really opened my mind. Impressive curation.
+2022-11-15,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-11-15,4,Positive,Yelp,Not my usual style of art but Ant Farm: 1968–1978 really opened my mind. Impressive curation.
+2022-11-17,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2022-11-18,5,Positive,Google,The Theaster Gates: Black Image Corporation exhibition challenged me in the best way. Will be back next month.
+2022-11-20,4,Positive,Yelp,Good variety of art and film. Ant Farm: 1968–1978 was a bit dense but rewarding.
+2022-11-20,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2022-11-22,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-11-25,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2022-11-26,5,Positive,Yelp,The Uncanny Valley: Being Human in the Age of AI exhibition challenged me in the best way. Will be back next month.
+2022-11-30,4,Positive,Google,The Mildred Howard: Room Tone exhibition challenged me in the best way. Will be back next month.
+2022-11-30,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-11-30,4,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2022-12-01,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-12-01,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2022-12-03,4,Positive,Yelp,The Tauba Auerbach: S v Z exhibition challenged me in the best way. Will be back next month.
+2022-12-04,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2022-12-04,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-12-04,3,Neutral,Google,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2022-12-08,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Past Lives. Pure cinema magic.
+2022-12-08,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2022-12-10,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2022-12-11,1,Negative,Google,One of the best film archives on the West Coast. Synonyms on the big screen was a dream.
+2022-12-13,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Jockum Nordström: The Lonely Ones show was breathtaking.
+2022-12-17,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2022-12-17,5,Positive,Google,The gallery spaces are beautifully curated. Bay Area Now 9 was my favorite show this year.
+2022-12-18,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Jockum Nordström: The Lonely Ones show was breathtaking.
+2022-12-18,4,Positive,Google,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2023-01-02,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-01-03,2,Negative,Google,Wonderful museum in the heart of Berkeley. The Barry McGee: Point the Finger show was breathtaking.
+2023-01-03,5,Positive,Yelp,BAMPFA always delivers. Saw The Zone of Interest here — stunning print on the big screen.
+2023-01-05,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Barry McGee: Point the Finger show was breathtaking.
+2023-01-10,5,Positive,Yelp,Good variety of art and film. Hung Liu: Portraits of Promised Lands was a bit dense but rewarding.
+2023-01-11,4,Positive,Google,One of the best film archives on the West Coast. In the Mood for Love on the big screen was a dream.
+2023-01-11,2,Negative,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-01-11,5,Positive,Google,One of the best film archives on the West Coast. Aftersun on the big screen was a dream.
+2023-01-12,4,Positive,Google,The Tauba Auerbach: S v Z exhibition challenged me in the best way. Will be back next month.
+2023-01-14,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-01-16,2,Negative,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-01-19,4,Positive,Google,The gallery spaces are beautifully curated. Uncanny Valley: Being Human in the Age of AI was my favorite show this year.
+2023-01-21,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-01-21,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2023-01-23,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Tauba Auerbach: S v Z show was breathtaking.
+2023-01-28,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-02-01,3,Neutral,Google,One of the best film archives on the West Coast. Synonyms on the big screen was a dream.
+2023-02-05,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Portrait of a Lady on Fire. Pure cinema magic.
+2023-02-08,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-02-08,4,Positive,Google,Not my usual style of art but Ant Farm: 1968–1978 really opened my mind. Impressive curation.
+2023-02-09,5,Positive,Google,"Wonderful museum in the heart of Berkeley. The Paper, Scissors, Stone: Contemporary Japanese Prints show was breathtaking."
+2023-02-10,4,Positive,Google,"The Paper, Scissors, Stone: Contemporary Japanese Prints exhibition challenged me in the best way. Will be back next month."
+2023-02-10,5,Positive,Yelp,Not my usual style of art but Theaster Gates: Black Image Corporation really opened my mind. Impressive curation.
+2023-02-13,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Mildred Howard: Room Tone show was breathtaking.
+2023-02-17,1,Negative,Google,A little pricey but the quality is always there. Loved the The Assassin screening.
+2023-02-17,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2023-02-17,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-02-19,1,Negative,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-02-20,5,Positive,Google,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2023-02-20,3,Neutral,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-02-20,2,Negative,Google,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2023-02-23,1,Negative,Yelp,One of the best film archives on the West Coast. Cache (Hidden) on the big screen was a dream.
+2023-02-24,4,Positive,Yelp,One of the best film archives on the West Coast. Yi Yi (A One and a Two) on the big screen was a dream.
+2023-02-26,3,Neutral,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-03-05,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-03-16,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-03-21,2,Negative,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-03-22,4,Positive,Yelp,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2023-03-23,5,Positive,Google,One of the best film archives on the West Coast. Tropical Malady on the big screen was a dream.
+2023-04-02,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-04-02,5,Positive,Yelp,One of the best film archives on the West Coast. Drive My Car on the big screen was a dream.
+2023-04-02,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-04-02,5,Positive,Google,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2023-04-02,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Uncanny Valley: Being Human in the Age of AI show was breathtaking.
+2023-04-03,4,Positive,Google,Great film programming. Caught a rare 35mm screening of The Zone of Interest. Pure cinema magic.
+2023-04-07,5,Positive,Google,The gallery spaces are beautifully curated. Jockum Nordström: The Lonely Ones was my favorite show this year.
+2023-04-07,4,Positive,Google,One of the best film archives on the West Coast. Drive My Car on the big screen was a dream.
+2023-04-08,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2023-04-13,5,Positive,Google,BAMPFA always delivers. Saw Decision to Leave here — stunning print on the big screen.
+2023-04-15,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2023-04-19,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Defne Ayas: Threshold show was breathtaking.
+2023-04-19,4,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Bay Area Now 9 show was breathtaking.
+2023-04-20,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-04-21,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-04-23,5,Positive,Yelp,The gallery spaces are beautifully curated. Ana Mendieta: Traces was my favorite show this year.
+2023-04-23,5,Positive,Google,Good variety of art and film. Gordon Matta-Clark: Anarchitect was a bit dense but rewarding.
+2023-04-24,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-04-30,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2023-04-30,1,Negative,Yelp,Not my usual style of art but Bay Area Now 9 really opened my mind. Impressive curation.
+2023-05-04,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-05-05,4,Positive,Yelp,BAMPFA always delivers. Saw Past Lives here — stunning print on the big screen.
+2023-05-05,3,Neutral,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2023-05-05,3,Neutral,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-05-06,4,Positive,Google,Good variety of art and film. Defne Ayas: Threshold was a bit dense but rewarding.
+2023-05-07,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2023-05-12,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Mildred Howard: Room Tone show was breathtaking.
+2023-05-13,5,Positive,Google,Not my usual style of art but Theaster Gates: Black Image Corporation really opened my mind. Impressive curation.
+2023-05-15,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-05-15,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Drive My Car screening.
+2023-05-17,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-05-19,5,Positive,Google,BAMPFA always delivers. Saw The Assassin here — stunning print on the big screen.
+2023-05-21,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-05-21,5,Positive,Yelp,BAMPFA always delivers. Saw Beau Travail here — stunning print on the big screen.
+2023-05-23,3,Neutral,Google,Great film programming. Caught a rare 35mm screening of Platform (Zhantai). Pure cinema magic.
+2023-05-24,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-05-27,4,Positive,Google,Good variety of art and film. Radical Presence: Black Performance in Contemporary Art was a bit dense but rewarding.
+2023-05-29,4,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2023-05-31,1,Negative,Google,Wonderful museum in the heart of Berkeley. The Ant Farm: 1968–1978 show was breathtaking.
+2023-06-02,3,Neutral,Yelp,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2023-06-03,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2023-06-04,5,Positive,Google,A little pricey but the quality is always there. Loved the A Brighter Summer Day screening.
+2023-06-06,1,Negative,Google,Solid programming but parking is tough. The content more than makes up for it.
+2023-06-07,4,Positive,Yelp,BAMPFA always delivers. Saw Platform (Zhantai) here — stunning print on the big screen.
+2023-06-07,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2023-06-08,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-06-15,5,Positive,Yelp,BAMPFA always delivers. Saw Past Lives here — stunning print on the big screen.
+2023-06-16,3,Neutral,Google,The gallery spaces are beautifully curated. Gordon Matta-Clark: Anarchitect was my favorite show this year.
+2023-06-19,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-06-19,3,Neutral,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-06-21,1,Negative,Google,Great film programming. Caught a rare 35mm screening of In the Mood for Love. Pure cinema magic.
+2023-06-22,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-06-23,4,Positive,Google,Not my usual style of art but Barry McGee: Point the Finger really opened my mind. Impressive curation.
+2023-06-26,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-06-30,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-06-30,4,Positive,Yelp,Good variety of art and film. Radical Presence: Black Performance in Contemporary Art was a bit dense but rewarding.
+2023-07-01,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-07-02,5,Positive,Yelp,Not my usual style of art but Radical Presence: Black Performance in Contemporary Art really opened my mind. Impressive curation.
+2023-07-03,2,Negative,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-07-09,5,Positive,Google,Good variety of art and film. Mildred Howard: Room Tone was a bit dense but rewarding.
+2023-07-24,4,Positive,Google,The gallery spaces are beautifully curated. Hung Liu: Portraits of Promised Lands was my favorite show this year.
+2023-07-27,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Barry McGee: Point the Finger show was breathtaking.
+2023-08-02,5,Positive,Google,A little pricey but the quality is always there. Loved the All of Us Strangers screening.
+2023-08-04,5,Positive,Google,The Barry McGee: Point the Finger exhibition challenged me in the best way. Will be back next month.
+2023-08-06,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Uncanny Valley: Being Human in the Age of AI show was breathtaking.
+2023-08-07,4,Positive,Google,The gallery spaces are beautifully curated. Barry McGee: Point the Finger was my favorite show this year.
+2023-08-10,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2023-08-11,2,Negative,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-08-13,5,Positive,Yelp,The Barry McGee: Point the Finger exhibition challenged me in the best way. Will be back next month.
+2023-08-13,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Mildred Howard: Room Tone show was breathtaking.
+2023-08-23,5,Positive,Google,BAMPFA always delivers. Saw First Cow here — stunning print on the big screen.
+2023-08-28,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Gordon Matta-Clark: Anarchitect show was breathtaking.
+2023-09-01,5,Positive,Google,BAMPFA always delivers. Saw Platform (Zhantai) here — stunning print on the big screen.
+2023-09-04,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-09-05,2,Negative,Yelp,Wonderful museum in the heart of Berkeley. The Uncanny Valley: Being Human in the Age of AI show was breathtaking.
+2023-09-13,4,Positive,Google,Good variety of art and film. Barry McGee: Point the Finger was a bit dense but rewarding.
+2023-09-14,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-09-15,3,Neutral,Google,Not my usual style of art but Hung Liu: Portraits of Promised Lands really opened my mind. Impressive curation.
+2023-09-16,1,Negative,Yelp,A little pricey but the quality is always there. Loved the All of Us Strangers screening.
+2023-09-17,5,Positive,Google,"The Paper, Scissors, Stone: Contemporary Japanese Prints exhibition challenged me in the best way. Will be back next month."
+2023-10-01,1,Negative,Google,The gallery spaces are beautifully curated. Mildred Howard: Room Tone was my favorite show this year.
+2023-10-02,4,Positive,Google,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2023-10-02,5,Positive,Yelp,Good variety of art and film. Radical Presence: Black Performance in Contemporary Art was a bit dense but rewarding.
+2023-10-04,4,Positive,Google,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2023-10-06,5,Positive,Yelp,One of the best film archives on the West Coast. Portrait of a Lady on Fire on the big screen was a dream.
+2023-10-07,5,Positive,Google,Great film programming. Caught a rare 35mm screening of First Cow. Pure cinema magic.
+2023-10-08,4,Positive,Yelp,One of the best film archives on the West Coast. Tropical Malady on the big screen was a dream.
+2023-10-08,1,Negative,Google,The Bay Area Now 9 exhibition challenged me in the best way. Will be back next month.
+2023-10-15,3,Neutral,Google,BAMPFA always delivers. Saw Aftersun here — stunning print on the big screen.
+2023-10-15,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-10-17,5,Positive,Google,Not my usual style of art but Tauba Auerbach: S v Z really opened my mind. Impressive curation.
+2023-10-19,3,Neutral,Google,Wonderful museum in the heart of Berkeley. The Dorothea Lange: Politics of Seeing show was breathtaking.
+2023-10-21,5,Positive,Google,One of the best film archives on the West Coast. Decision to Leave on the big screen was a dream.
+2023-10-23,4,Positive,Yelp,The gallery spaces are beautifully curated. Mildred Howard: Room Tone was my favorite show this year.
+2023-10-24,4,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Mulholland Drive. Pure cinema magic.
+2023-10-31,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-10-31,3,Neutral,Google,The gallery spaces are beautifully curated. Radical Presence: Black Performance in Contemporary Art was my favorite show this year.
+2023-11-02,3,Neutral,Google,Great film programming. Caught a rare 35mm screening of Yi Yi (A One and a Two). Pure cinema magic.
+2023-11-04,5,Positive,Yelp,One of the best film archives on the West Coast. Tropical Malady on the big screen was a dream.
+2023-11-05,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-11-07,5,Positive,Google,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2023-11-11,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2023-11-12,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2023-11-12,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2023-11-13,2,Negative,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2023-11-15,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2023-11-15,2,Negative,Google,Not my usual style of art but Theaster Gates: Black Image Corporation really opened my mind. Impressive curation.
+2023-11-18,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2023-11-19,4,Positive,Google,Not my usual style of art but Ana Mendieta: Traces really opened my mind. Impressive curation.
+2023-11-20,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-11-20,5,Positive,Google,A little pricey but the quality is always there. Loved the All of Us Strangers screening.
+2023-11-21,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Tauba Auerbach: S v Z show was breathtaking.
+2023-11-21,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-11-23,5,Positive,Yelp,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2023-11-25,4,Positive,Google,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2023-11-26,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Gordon Matta-Clark: Anarchitect show was breathtaking.
+2023-11-27,5,Positive,Yelp,The gallery spaces are beautifully curated. Theaster Gates: Black Image Corporation was my favorite show this year.
+2023-11-28,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-11-28,5,Positive,Google,One of the best film archives on the West Coast. Mulholland Drive on the big screen was a dream.
+2023-12-03,1,Negative,Google,A little pricey but the quality is always there. Loved the A Brighter Summer Day screening.
+2023-12-03,4,Positive,Google,Good variety of art and film. Barry McGee: Point the Finger was a bit dense but rewarding.
+2023-12-04,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Portrait of a Lady on Fire screening.
+2023-12-08,3,Neutral,Google,Good variety of art and film. Jockum Nordström: The Lonely Ones was a bit dense but rewarding.
+2023-12-11,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2023-12-12,4,Positive,Yelp,Good variety of art and film. Theaster Gates: Black Image Corporation was a bit dense but rewarding.
+2023-12-15,4,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2023-12-20,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2023-12-20,4,Positive,Yelp,A little pricey but the quality is always there. Loved the In the Mood for Love screening.
+2023-12-21,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2023-12-27,1,Negative,Yelp,Good variety of art and film. Barry McGee: Point the Finger was a bit dense but rewarding.
+2023-12-31,3,Neutral,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2023-12-31,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Defne Ayas: Threshold show was breathtaking.
+2023-12-31,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-01-07,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-01-09,5,Positive,Yelp,Not my usual style of art but Radical Presence: Black Performance in Contemporary Art really opened my mind. Impressive curation.
+2024-01-09,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Radical Presence: Black Performance in Contemporary Art show was breathtaking.
+2024-01-12,5,Positive,Yelp,BAMPFA always delivers. Saw Synonyms here — stunning print on the big screen.
+2024-01-13,3,Neutral,Google,The gallery spaces are beautifully curated. Theaster Gates: Black Image Corporation was my favorite show this year.
+2024-01-13,5,Positive,Google,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2024-01-15,4,Positive,Google,A little pricey but the quality is always there. Loved the Drive My Car screening.
+2024-01-20,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-01-22,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-01-23,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-01-27,5,Positive,Google,Good variety of art and film. Jockum Nordström: The Lonely Ones was a bit dense but rewarding.
+2024-01-27,1,Negative,Yelp,BAMPFA always delivers. Saw The Assassin here — stunning print on the big screen.
+2024-01-29,5,Positive,Google,The gallery spaces are beautifully curated. Hung Liu: Portraits of Promised Lands was my favorite show this year.
+2024-02-01,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-02-02,3,Neutral,Google,A little pricey but the quality is always there. Loved the Tropical Malady screening.
+2024-02-04,3,Neutral,Yelp,Good variety of art and film. Jockum Nordström: The Lonely Ones was a bit dense but rewarding.
+2024-02-07,5,Positive,Google,BAMPFA always delivers. Saw Portrait of a Lady on Fire here — stunning print on the big screen.
+2024-02-07,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Drive My Car screening.
+2024-02-08,4,Positive,Google,A little pricey but the quality is always there. Loved the Portrait of a Lady on Fire screening.
+2024-02-15,4,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2024-02-17,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-02-18,5,Positive,Yelp,The Gordon Matta-Clark: Anarchitect exhibition challenged me in the best way. Will be back next month.
+2024-02-19,3,Neutral,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-02-20,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Bay Area Now 9 show was breathtaking.
+2024-02-25,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Aftersun. Pure cinema magic.
+2024-02-26,4,Positive,Google,Good variety of art and film. Ana Mendieta: Traces was a bit dense but rewarding.
+2024-02-27,5,Positive,Google,The Gordon Matta-Clark: Anarchitect exhibition challenged me in the best way. Will be back next month.
+2024-02-27,4,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-02-29,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-03-04,2,Negative,Google,Solid programming but parking is tough. The content more than makes up for it.
+2024-03-05,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-03-09,5,Positive,Google,Not my usual style of art but Gordon Matta-Clark: Anarchitect really opened my mind. Impressive curation.
+2024-03-11,3,Neutral,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-03-11,5,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Synonyms. Pure cinema magic.
+2024-03-16,1,Negative,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-03-17,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-03-18,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-03-21,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-03-25,4,Positive,Google,BAMPFA always delivers. Saw Tropical Malady here — stunning print on the big screen.
+2024-03-28,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-03-30,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Yi Yi (A One and a Two). Pure cinema magic.
+2024-03-31,5,Positive,Google,The gallery spaces are beautifully curated. Bay Area Now 9 was my favorite show this year.
+2024-04-03,5,Positive,Google,Good variety of art and film. Jockum Nordström: The Lonely Ones was a bit dense but rewarding.
+2024-04-10,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-04-11,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-04-11,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-04-14,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-04-14,4,Positive,Yelp,A little pricey but the quality is always there. Loved the Beau Travail screening.
+2024-04-14,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Beau Travail screening.
+2024-04-17,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Tropical Malady. Pure cinema magic.
+2024-04-21,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-04-21,5,Positive,Google,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2024-04-24,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2024-04-25,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-04-27,5,Positive,Yelp,BAMPFA always delivers. Saw Mulholland Drive here — stunning print on the big screen.
+2024-04-28,2,Negative,Google,Good variety of art and film. Uncanny Valley: Being Human in the Age of AI was a bit dense but rewarding.
+2024-05-02,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-05-04,5,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Yi Yi (A One and a Two). Pure cinema magic.
+2024-05-07,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-05-10,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Jockum Nordström: The Lonely Ones show was breathtaking.
+2024-05-11,5,Positive,Google,One of the best film archives on the West Coast. Past Lives on the big screen was a dream.
+2024-05-12,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-05-12,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-05-15,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-05-19,5,Positive,Yelp,Not my usual style of art but Tauba Auerbach: S v Z really opened my mind. Impressive curation.
+2024-05-19,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-05-21,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-05-22,4,Positive,Google,The Dorothea Lange: Politics of Seeing exhibition challenged me in the best way. Will be back next month.
+2024-05-22,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-05-22,5,Positive,Google,A little pricey but the quality is always there. Loved the A Brighter Summer Day screening.
+2024-05-24,4,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-05-25,4,Positive,Google,BAMPFA always delivers. Saw In the Mood for Love here — stunning print on the big screen.
+2024-05-26,2,Negative,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-05-30,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-05-31,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-06-03,2,Negative,Yelp,BAMPFA always delivers. Saw Portrait of a Lady on Fire here — stunning print on the big screen.
+2024-06-05,5,Positive,Yelp,The Uncanny Valley: Being Human in the Age of AI exhibition challenged me in the best way. Will be back next month.
+2024-06-08,5,Positive,Google,Good variety of art and film. Dorothea Lange: Politics of Seeing was a bit dense but rewarding.
+2024-06-09,4,Positive,Google,One of the best film archives on the West Coast. The Worst Person in the World on the big screen was a dream.
+2024-06-09,4,Positive,Google,A little pricey but the quality is always there. Loved the Aftersun screening.
+2024-06-11,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-06-13,5,Positive,Google,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2024-06-14,5,Positive,Google,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2024-06-15,5,Positive,Google,Not my usual style of art but Dorothea Lange: Politics of Seeing really opened my mind. Impressive curation.
+2024-06-15,5,Positive,Yelp,The Jockum Nordström: The Lonely Ones exhibition challenged me in the best way. Will be back next month.
+2024-06-24,5,Positive,Google,One of the best film archives on the West Coast. Portrait of a Lady on Fire on the big screen was a dream.
+2024-06-26,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Theaster Gates: Black Image Corporation show was breathtaking.
+2024-06-28,3,Neutral,Google,Great film programming. Caught a rare 35mm screening of Mulholland Drive. Pure cinema magic.
+2024-06-28,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-06-29,5,Positive,Yelp,The gallery spaces are beautifully curated. Mildred Howard: Room Tone was my favorite show this year.
+2024-06-29,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Aftersun. Pure cinema magic.
+2024-06-30,5,Positive,Google,The gallery spaces are beautifully curated. Ana Mendieta: Traces was my favorite show this year.
+2024-07-01,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2024-07-02,4,Positive,Google,Not my usual style of art but Defne Ayas: Threshold really opened my mind. Impressive curation.
+2024-07-04,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-07-05,2,Negative,Yelp,Good variety of art and film. Mildred Howard: Room Tone was a bit dense but rewarding.
+2024-07-08,5,Positive,Google,A little pricey but the quality is always there. Loved the A Brighter Summer Day screening.
+2024-07-09,5,Positive,Google,Good variety of art and film. Bay Area Now 9 was a bit dense but rewarding.
+2024-07-10,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2024-07-10,4,Positive,Google,BAMPFA always delivers. Saw Drive My Car here — stunning print on the big screen.
+2024-07-11,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-07-13,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-07-13,4,Positive,Yelp,A little pricey but the quality is always there. Loved the The Worst Person in the World screening.
+2024-07-16,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Ana Mendieta: Traces show was breathtaking.
+2024-07-16,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-07-17,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-07-25,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-08-02,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-08-03,2,Negative,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-08-03,3,Neutral,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-08-03,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-08-04,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Bay Area Now 9 show was breathtaking.
+2024-08-05,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-08-05,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2024-08-07,3,Neutral,Google,BAMPFA always delivers. Saw Decision to Leave here — stunning print on the big screen.
+2024-08-08,3,Neutral,Google,Good variety of art and film. Jockum Nordström: The Lonely Ones was a bit dense but rewarding.
+2024-08-10,2,Negative,Yelp,Great film programming. Caught a rare 35mm screening of Platform (Zhantai). Pure cinema magic.
+2024-08-12,4,Positive,Yelp,A little pricey but the quality is always there. Loved the Cache (Hidden) screening.
+2024-08-12,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-08-17,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-08-18,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-08-20,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Tropical Malady screening.
+2024-08-26,4,Positive,Google,The gallery spaces are beautifully curated. Barry McGee: Point the Finger was my favorite show this year.
+2024-08-30,4,Positive,Google,Not my usual style of art but Tauba Auerbach: S v Z really opened my mind. Impressive curation.
+2024-09-03,5,Positive,Google,BAMPFA always delivers. Saw Tropical Malady here — stunning print on the big screen.
+2024-09-06,3,Neutral,Yelp,Not my usual style of art but Uncanny Valley: Being Human in the Age of AI really opened my mind. Impressive curation.
+2024-09-08,5,Positive,Google,The Ana Mendieta: Traces exhibition challenged me in the best way. Will be back next month.
+2024-09-20,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-09-23,4,Positive,Yelp,"BAMPFA always delivers. Saw Jeanne Dielman, 23 quai du Commerce here — stunning print on the big screen."
+2024-09-23,5,Positive,Google,One of the best film archives on the West Coast. Cache (Hidden) on the big screen was a dream.
+2024-09-28,3,Neutral,Google,Wonderful museum in the heart of Berkeley. The Barry McGee: Point the Finger show was breathtaking.
+2024-09-29,5,Positive,Google,The gallery spaces are beautifully curated. Uncanny Valley: Being Human in the Age of AI was my favorite show this year.
+2024-09-29,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-09-30,2,Negative,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-09-30,3,Neutral,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-10-02,4,Positive,Yelp,"BAMPFA always delivers. Saw Jeanne Dielman, 23 quai du Commerce here — stunning print on the big screen."
+2024-10-04,3,Neutral,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-10-04,5,Positive,Google,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2024-10-05,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Cache (Hidden). Pure cinema magic.
+2024-10-06,4,Positive,Google,A little pricey but the quality is always there. Loved the Portrait of a Lady on Fire screening.
+2024-10-09,4,Positive,Yelp,A little pricey but the quality is always there. Loved the Aftersun screening.
+2024-10-09,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-10-11,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-10-11,5,Positive,Yelp,"The gallery spaces are beautifully curated. Paper, Scissors, Stone: Contemporary Japanese Prints was my favorite show this year."
+2024-10-13,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-10-13,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-10-15,5,Positive,Yelp,One of the best film archives on the West Coast. The Worst Person in the World on the big screen was a dream.
+2024-10-15,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-10-16,4,Positive,Yelp,Great film programming. Caught a rare 35mm screening of All of Us Strangers. Pure cinema magic.
+2024-10-17,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2024-10-17,4,Positive,Google,One of the best film archives on the West Coast. All of Us Strangers on the big screen was a dream.
+2024-10-17,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-10-18,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-10-19,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-10-22,5,Positive,Yelp,BAMPFA always delivers. Saw Decision to Leave here — stunning print on the big screen.
+2024-10-28,4,Positive,Yelp,Good variety of art and film. Theaster Gates: Black Image Corporation was a bit dense but rewarding.
+2024-10-28,4,Positive,Yelp,A little pricey but the quality is always there. Loved the Tropical Malady screening.
+2024-10-29,4,Positive,Google,The gallery spaces are beautifully curated. Hung Liu: Portraits of Promised Lands was my favorite show this year.
+2024-11-02,5,Positive,Yelp,The Tauba Auerbach: S v Z exhibition challenged me in the best way. Will be back next month.
+2024-11-04,5,Positive,Google,One of the best film archives on the West Coast. Beau Travail on the big screen was a dream.
+2024-11-05,4,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-11-07,3,Neutral,Google,Not my usual style of art but Dorothea Lange: Politics of Seeing really opened my mind. Impressive curation.
+2024-11-09,5,Positive,Google,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2024-11-11,4,Positive,Yelp,Not my usual style of art but Ana Mendieta: Traces really opened my mind. Impressive curation.
+2024-11-11,3,Neutral,Google,A little pricey but the quality is always there. Loved the In the Mood for Love screening.
+2024-11-12,5,Positive,Google,BAMPFA always delivers. Saw Beau Travail here — stunning print on the big screen.
+2024-11-14,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-11-15,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-11-18,4,Positive,Yelp,Not my usual style of art but Mildred Howard: Room Tone really opened my mind. Impressive curation.
+2024-11-18,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-11-20,2,Negative,Google,BAMPFA always delivers. Saw Drive My Car here — stunning print on the big screen.
+2024-11-21,5,Positive,Google,"A little pricey but the quality is always there. Loved the Jeanne Dielman, 23 quai du Commerce screening."
+2024-11-22,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-11-23,4,Positive,Google,A little pricey but the quality is always there. Loved the A Brighter Summer Day screening.
+2024-11-26,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2024-11-26,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-11-28,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-11-30,5,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2024-12-01,5,Positive,Google,One of the best film archives on the West Coast. The Worst Person in the World on the big screen was a dream.
+2024-12-06,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-12-07,4,Positive,Google,The gallery spaces are beautifully curated. Defne Ayas: Threshold was my favorite show this year.
+2024-12-08,1,Negative,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2024-12-10,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2024-12-12,5,Positive,Google,A little pricey but the quality is always there. Loved the Aftersun screening.
+2024-12-16,5,Positive,Google,One of the best film archives on the West Coast. The Zone of Interest on the big screen was a dream.
+2024-12-21,4,Positive,Yelp,A little pricey but the quality is always there. Loved the Past Lives screening.
+2024-12-23,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2024-12-23,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2024-12-25,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2024-12-29,4,Positive,Google,"The gallery spaces are beautifully curated. Paper, Scissors, Stone: Contemporary Japanese Prints was my favorite show this year."
+2024-12-31,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Dorothea Lange: Politics of Seeing show was breathtaking.
+2024-12-31,4,Positive,Google,One of the best film archives on the West Coast. Yi Yi (A One and a Two) on the big screen was a dream.
+2024-12-31,5,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Drive My Car. Pure cinema magic.
+2024-12-31,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-01-05,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-01-10,4,Positive,Google,BAMPFA always delivers. Saw Past Lives here — stunning print on the big screen.
+2025-01-16,5,Positive,Yelp,One of the best film archives on the West Coast. Mulholland Drive on the big screen was a dream.
+2025-01-16,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-01-17,2,Negative,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-01-18,2,Negative,Google,Great film programming. Caught a rare 35mm screening of Portrait of a Lady on Fire. Pure cinema magic.
+2025-01-21,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-01-23,3,Neutral,Yelp,BAMPFA always delivers. Saw Aftersun here — stunning print on the big screen.
+2025-01-23,2,Negative,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-01-24,5,Positive,Yelp,One of the best film archives on the West Coast. Tropical Malady on the big screen was a dream.
+2025-01-25,3,Neutral,Yelp,Not my usual style of art but Jockum Nordström: The Lonely Ones really opened my mind. Impressive curation.
+2025-01-27,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-01-29,3,Neutral,Yelp,Not my usual style of art but Jockum Nordström: The Lonely Ones really opened my mind. Impressive curation.
+2025-02-01,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-02-01,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-02-01,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2025-02-01,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-02-03,4,Positive,Google,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2025-02-04,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2025-02-05,4,Positive,Yelp,The Mildred Howard: Room Tone exhibition challenged me in the best way. Will be back next month.
+2025-02-07,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-02-09,2,Negative,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-02-09,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Theaster Gates: Black Image Corporation show was breathtaking.
+2025-02-10,1,Negative,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-02-12,5,Positive,Yelp,The gallery spaces are beautifully curated. Ant Farm: 1968–1978 was my favorite show this year.
+2025-02-12,2,Negative,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-02-15,4,Positive,Yelp,The gallery spaces are beautifully curated. Defne Ayas: Threshold was my favorite show this year.
+2025-02-15,5,Positive,Google,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2025-02-17,2,Negative,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-02-18,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-02-18,4,Positive,Yelp,A little pricey but the quality is always there. Loved the The Zone of Interest screening.
+2025-02-19,4,Positive,Yelp,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2025-02-23,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-02-23,3,Neutral,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-02-24,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-02-25,4,Positive,Google,BAMPFA always delivers. Saw Decision to Leave here — stunning print on the big screen.
+2025-02-27,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2025-02-27,5,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2025-03-02,2,Negative,Google,The Radical Presence: Black Performance in Contemporary Art exhibition challenged me in the best way. Will be back next month.
+2025-03-09,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-03-11,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-03-11,4,Positive,Google,The Ana Mendieta: Traces exhibition challenged me in the best way. Will be back next month.
+2025-03-12,2,Negative,Yelp,A little pricey but the quality is always there. Loved the Past Lives screening.
+2025-03-14,5,Positive,Google,BAMPFA always delivers. Saw Mulholland Drive here — stunning print on the big screen.
+2025-03-16,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-03-17,5,Positive,Google,"A little pricey but the quality is always there. Loved the Jeanne Dielman, 23 quai du Commerce screening."
+2025-03-20,2,Negative,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-03-23,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Synonyms screening.
+2025-03-24,3,Neutral,Google,Wonderful museum in the heart of Berkeley. The Defne Ayas: Threshold show was breathtaking.
+2025-03-26,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-03-28,1,Negative,Yelp,The gallery spaces are beautifully curated. Hung Liu: Portraits of Promised Lands was my favorite show this year.
+2025-03-28,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-03-31,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-04-02,5,Positive,Google,One of the best film archives on the West Coast. The Worst Person in the World on the big screen was a dream.
+2025-04-04,4,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Theaster Gates: Black Image Corporation show was breathtaking.
+2025-04-05,5,Positive,Google,"The Paper, Scissors, Stone: Contemporary Japanese Prints exhibition challenged me in the best way. Will be back next month."
+2025-04-05,5,Positive,Google,The gallery spaces are beautifully curated. Ant Farm: 1968–1978 was my favorite show this year.
+2025-04-07,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-04-07,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-04-07,1,Negative,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-04-09,3,Neutral,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-04-10,3,Neutral,Google,BAMPFA always delivers. Saw A Brighter Summer Day here — stunning print on the big screen.
+2025-04-15,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-04-16,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-04-16,5,Positive,Yelp,One of the best film archives on the West Coast. A Brighter Summer Day on the big screen was a dream.
+2025-04-16,5,Positive,Google,One of the best film archives on the West Coast. Beau Travail on the big screen was a dream.
+2025-04-22,4,Positive,Google,One of the best film archives on the West Coast. The Assassin on the big screen was a dream.
+2025-04-29,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-04-29,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-05-01,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-05-02,3,Neutral,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-05-05,3,Neutral,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2025-05-06,4,Positive,Yelp,BAMPFA always delivers. Saw Mulholland Drive here — stunning print on the big screen.
+2025-05-14,4,Positive,Yelp,The Uncanny Valley: Being Human in the Age of AI exhibition challenged me in the best way. Will be back next month.
+2025-05-14,3,Neutral,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-05-15,1,Negative,Google,The Gordon Matta-Clark: Anarchitect exhibition challenged me in the best way. Will be back next month.
+2025-05-16,4,Positive,Google,A little pricey but the quality is always there. Loved the The Assassin screening.
+2025-05-19,5,Positive,Yelp,"Wonderful museum in the heart of Berkeley. The Paper, Scissors, Stone: Contemporary Japanese Prints show was breathtaking."
+2025-05-23,5,Positive,Google,Not my usual style of art but Dorothea Lange: Politics of Seeing really opened my mind. Impressive curation.
+2025-05-23,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-05-26,3,Neutral,Yelp,The gallery spaces are beautifully curated. Theaster Gates: Black Image Corporation was my favorite show this year.
+2025-05-28,2,Negative,Yelp,"A little pricey but the quality is always there. Loved the Jeanne Dielman, 23 quai du Commerce screening."
+2025-05-28,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-05-31,3,Neutral,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-06-01,5,Positive,Google,Good variety of art and film. Ant Farm: 1968–1978 was a bit dense but rewarding.
+2025-06-01,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-06-05,2,Negative,Google,A little pricey but the quality is always there. Loved the Past Lives screening.
+2025-06-07,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-06-13,4,Positive,Yelp,The gallery spaces are beautifully curated. Defne Ayas: Threshold was my favorite show this year.
+2025-06-13,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-06-15,3,Neutral,Google,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2025-06-19,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-06-19,5,Positive,Yelp,Great film programming. Caught a rare 35mm screening of A Brighter Summer Day. Pure cinema magic.
+2025-06-22,3,Neutral,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-06-26,4,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-06-26,4,Positive,Google,One of the best film archives on the West Coast. Platform (Zhantai) on the big screen was a dream.
+2025-07-02,5,Positive,Yelp,Great film programming. Caught a rare 35mm screening of Synonyms. Pure cinema magic.
+2025-07-05,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Tauba Auerbach: S v Z show was breathtaking.
+2025-07-05,4,Positive,Yelp,One of the best film archives on the West Coast. Cache (Hidden) on the big screen was a dream.
+2025-07-06,5,Positive,Google,Good variety of art and film. Defne Ayas: Threshold was a bit dense but rewarding.
+2025-07-08,5,Positive,Google,One of the best film archives on the West Coast. The Zone of Interest on the big screen was a dream.
+2025-07-09,4,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Hung Liu: Portraits of Promised Lands show was breathtaking.
+2025-07-09,5,Positive,Yelp,BAMPFA always delivers. Saw Mulholland Drive here — stunning print on the big screen.
+2025-07-13,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-07-21,5,Positive,Yelp,One of the best film archives on the West Coast. Aftersun on the big screen was a dream.
+2025-07-21,2,Negative,Google,One of the best film archives on the West Coast. Tropical Malady on the big screen was a dream.
+2025-07-22,2,Negative,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-07-23,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-07-27,5,Positive,Google,One of the best film archives on the West Coast. Portrait of a Lady on Fire on the big screen was a dream.
+2025-08-01,5,Positive,Yelp,BAMPFA always delivers. Saw Decision to Leave here — stunning print on the big screen.
+2025-08-05,4,Positive,Google,A little pricey but the quality is always there. Loved the The Assassin screening.
+2025-08-08,5,Positive,Google,Good variety of art and film. Hung Liu: Portraits of Promised Lands was a bit dense but rewarding.
+2025-08-09,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-08-09,5,Positive,Yelp,The gallery spaces are beautifully curated. Jockum Nordström: The Lonely Ones was my favorite show this year.
+2025-08-10,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-08-17,5,Positive,Google,The Uncanny Valley: Being Human in the Age of AI exhibition challenged me in the best way. Will be back next month.
+2025-08-17,4,Positive,Google,BAMPFA always delivers. Saw Decision to Leave here — stunning print on the big screen.
+2025-08-26,5,Positive,Google,The gallery spaces are beautifully curated. Hung Liu: Portraits of Promised Lands was my favorite show this year.
+2025-08-30,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2025-09-06,2,Negative,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2025-09-11,5,Positive,Yelp,A little pricey but the quality is always there. Loved the Yi Yi (A One and a Two) screening.
+2025-09-12,3,Neutral,Yelp,Great film programming. Caught a rare 35mm screening of First Cow. Pure cinema magic.
+2025-09-12,4,Positive,Google,The Ant Farm: 1968–1978 exhibition challenged me in the best way. Will be back next month.
+2025-09-14,2,Negative,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-09-15,3,Neutral,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-09-15,2,Negative,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-09-17,2,Negative,Yelp,A little pricey but the quality is always there. Loved the A Brighter Summer Day screening.
+2025-09-18,4,Positive,Yelp,BAMPFA always delivers. Saw All of Us Strangers here — stunning print on the big screen.
+2025-09-19,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-09-22,3,Neutral,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-09-22,5,Positive,Google,Good variety of art and film. Gordon Matta-Clark: Anarchitect was a bit dense but rewarding.
+2025-09-22,3,Neutral,Google,Great film programming. Caught a rare 35mm screening of In the Mood for Love. Pure cinema magic.
+2025-09-24,4,Positive,Google,The Gordon Matta-Clark: Anarchitect exhibition challenged me in the best way. Will be back next month.
+2025-10-03,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-10-03,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-10-06,3,Neutral,Yelp,Good variety of art and film. Tauba Auerbach: S v Z was a bit dense but rewarding.
+2025-10-07,2,Negative,Google,Not my usual style of art but Dorothea Lange: Politics of Seeing really opened my mind. Impressive curation.
+2025-10-07,5,Positive,Yelp,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2025-10-09,5,Positive,Google,The Theaster Gates: Black Image Corporation exhibition challenged me in the best way. Will be back next month.
+2025-10-11,5,Positive,Yelp,One of the best film archives on the West Coast. In the Mood for Love on the big screen was a dream.
+2025-10-11,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-10-15,4,Positive,Google,Not my usual style of art but Ana Mendieta: Traces really opened my mind. Impressive curation.
+2025-10-17,3,Neutral,Google,Good variety of art and film. Ana Mendieta: Traces was a bit dense but rewarding.
+2025-10-18,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-10-19,5,Positive,Google,The gallery spaces are beautifully curated. Tauba Auerbach: S v Z was my favorite show this year.
+2025-10-20,5,Positive,Google,The gallery spaces are beautifully curated. Barry McGee: Point the Finger was my favorite show this year.
+2025-10-20,4,Positive,Google,A little pricey but the quality is always there. Loved the Yi Yi (A One and a Two) screening.
+2025-10-23,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-10-23,4,Positive,Google,The gallery spaces are beautifully curated. Ana Mendieta: Traces was my favorite show this year.
+2025-10-25,4,Positive,Yelp,Solid programming but parking is tough. The content more than makes up for it.
+2025-10-25,5,Positive,Yelp,Not my usual style of art but Hung Liu: Portraits of Promised Lands really opened my mind. Impressive curation.
+2025-10-28,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-10-30,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-10-31,5,Positive,Yelp,One of the best film archives on the West Coast. In the Mood for Love on the big screen was a dream.
+2025-10-31,5,Positive,Google,Not my usual style of art but Uncanny Valley: Being Human in the Age of AI really opened my mind. Impressive curation.
+2025-11-02,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-11-02,3,Neutral,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-11-02,5,Positive,Yelp,One of the best film archives on the West Coast. Cache (Hidden) on the big screen was a dream.
+2025-11-03,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-11-06,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-11-06,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-11-08,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-11-09,5,Positive,Google,A little pricey but the quality is always there. Loved the In the Mood for Love screening.
+2025-11-09,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Bay Area Now 9 show was breathtaking.
+2025-11-12,1,Negative,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-11-13,5,Positive,Google,A little pricey but the quality is always there. Loved the The Worst Person in the World screening.
+2025-11-14,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Mildred Howard: Room Tone show was breathtaking.
+2025-11-19,2,Negative,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-11-20,3,Neutral,Yelp,"One of the best film archives on the West Coast. Jeanne Dielman, 23 quai du Commerce on the big screen was a dream."
+2025-11-21,4,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-11-21,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-11-22,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-11-26,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-11-26,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2025-11-27,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-11-28,5,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2025-11-28,4,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-11-29,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2025-11-29,4,Positive,Google,One of the best film archives on the West Coast. Synonyms on the big screen was a dream.
+2025-12-08,5,Positive,Google,Wonderful museum in the heart of Berkeley. The Radical Presence: Black Performance in Contemporary Art show was breathtaking.
+2025-12-10,5,Positive,Google,One of the best film archives on the West Coast. Aftersun on the big screen was a dream.
+2025-12-10,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-12-11,5,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2025-12-13,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2025-12-15,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Beau Travail. Pure cinema magic.
+2025-12-16,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Mildred Howard: Room Tone show was breathtaking.
+2025-12-19,4,Positive,Google,Great film programming. Caught a rare 35mm screening of Yi Yi (A One and a Two). Pure cinema magic.
+2025-12-21,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-12-26,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2025-12-28,5,Positive,Google,BAMPFA always delivers. Saw Drive My Car here — stunning print on the big screen.
+2025-12-30,4,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2025-12-30,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Dorothea Lange: Politics of Seeing show was breathtaking.
+2026-01-02,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2026-01-02,4,Positive,Yelp,One of the best film archives on the West Coast. The Zone of Interest on the big screen was a dream.
+2026-01-03,5,Positive,Yelp,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2026-01-06,4,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2026-01-08,3,Neutral,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-01-10,5,Positive,Google,BAMPFA always delivers. Saw All of Us Strangers here — stunning print on the big screen.
+2026-01-13,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2026-01-15,5,Positive,Google,BAMPFA always delivers. Saw The Worst Person in the World here — stunning print on the big screen.
+2026-01-16,4,Positive,Google,"The gallery spaces are beautifully curated. Paper, Scissors, Stone: Contemporary Japanese Prints was my favorite show this year."
+2026-01-17,3,Neutral,Google,One of the best film archives on the West Coast. All of Us Strangers on the big screen was a dream.
+2026-01-21,3,Neutral,Google,The Dorothea Lange: Politics of Seeing exhibition challenged me in the best way. Will be back next month.
+2026-01-23,3,Neutral,Yelp,One of the best film archives on the West Coast. Yi Yi (A One and a Two) on the big screen was a dream.
+2026-01-24,2,Negative,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-01-25,5,Positive,Google,BAMPFA always delivers. Saw Tropical Malady here — stunning print on the big screen.
+2026-01-25,2,Negative,Yelp,The Uncanny Valley: Being Human in the Age of AI exhibition challenged me in the best way. Will be back next month.
+2026-01-28,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-01-28,5,Positive,Google,The gallery spaces are beautifully curated. Defne Ayas: Threshold was my favorite show this year.
+2026-02-01,5,Positive,Google,Not my usual style of art but Ana Mendieta: Traces really opened my mind. Impressive curation.
+2026-02-01,4,Positive,Google,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-02-03,5,Positive,Yelp,The Mildred Howard: Room Tone exhibition challenged me in the best way. Will be back next month.
+2026-02-09,5,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2026-02-10,3,Neutral,Yelp,The Defne Ayas: Threshold exhibition challenged me in the best way. Will be back next month.
+2026-02-10,5,Positive,Google,"Arrived late and missed the intro talk, but the exhibition itself was extraordinary."
+2026-02-11,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2026-02-12,5,Positive,Yelp,The Theaster Gates: Black Image Corporation exhibition challenged me in the best way. Will be back next month.
+2026-02-13,5,Positive,Yelp,Good variety of art and film. Dorothea Lange: Politics of Seeing was a bit dense but rewarding.
+2026-02-14,5,Positive,Google,Not my usual style of art but Tauba Auerbach: S v Z really opened my mind. Impressive curation.
+2026-02-18,4,Positive,Yelp,Good variety of art and film. Dorothea Lange: Politics of Seeing was a bit dense but rewarding.
+2026-02-18,5,Positive,Google,"Not my usual style of art but Paper, Scissors, Stone: Contemporary Japanese Prints really opened my mind. Impressive curation."
+2026-02-19,5,Positive,Google,Not my usual style of art but Dorothea Lange: Politics of Seeing really opened my mind. Impressive curation.
+2026-02-27,4,Positive,Yelp,Good variety of art and film. Uncanny Valley: Being Human in the Age of AI was a bit dense but rewarding.
+2026-02-27,5,Positive,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2026-02-28,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2026-03-03,5,Positive,Google,The gallery spaces are beautifully curated. Theaster Gates: Black Image Corporation was my favorite show this year.
+2026-03-04,4,Positive,Google,Great film programming. Caught a rare 35mm screening of A Brighter Summer Day. Pure cinema magic.
+2026-03-06,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2026-03-08,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Jockum Nordström: The Lonely Ones show was breathtaking.
+2026-03-08,4,Positive,Yelp,One of the best film archives on the West Coast. In the Mood for Love on the big screen was a dream.
+2026-03-09,5,Positive,Yelp,Membership is absolutely worth it. Always something new and thought-provoking.
+2026-03-10,5,Positive,Google,A little pricey but the quality is always there. Loved the Aftersun screening.
+2026-03-11,4,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-03-11,4,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2026-03-12,4,Positive,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2026-03-13,1,Negative,Google,Wonderful museum in the heart of Berkeley. The Tauba Auerbach: S v Z show was breathtaking.
+2026-03-14,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2026-03-16,4,Positive,Yelp,Not my usual style of art but Theaster Gates: Black Image Corporation really opened my mind. Impressive curation.
+2026-03-16,4,Positive,Yelp,A gem of the Bay Area arts scene. Every visit feels special.
+2026-03-17,3,Neutral,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-03-17,5,Positive,Yelp,BAMPFA always delivers. Saw Platform (Zhantai) here — stunning print on the big screen.
+2026-03-19,5,Positive,Google,Good variety of art and film. Ant Farm: 1968–1978 was a bit dense but rewarding.
+2026-03-20,2,Negative,Google,The gallery spaces are beautifully curated. Dorothea Lange: Politics of Seeing was my favorite show this year.
+2026-03-22,3,Neutral,Google,A little pricey but the quality is always there. Loved the Aftersun screening.
+2026-03-23,1,Negative,Yelp,"Good variety of art and film. Paper, Scissors, Stone: Contemporary Japanese Prints was a bit dense but rewarding."
+2026-03-24,4,Positive,Yelp,The Barry McGee: Point the Finger exhibition challenged me in the best way. Will be back next month.
+2026-03-25,2,Negative,Google,Good variety of art and film. Ant Farm: 1968–1978 was a bit dense but rewarding.
+2026-03-27,5,Positive,Google,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2026-03-28,2,Negative,Yelp,Great film programming. Caught a rare 35mm screening of Aftersun. Pure cinema magic.
+2026-03-28,5,Positive,Google,Not my usual style of art but Barry McGee: Point the Finger really opened my mind. Impressive curation.
+2026-04-01,4,Positive,Yelp,Not my usual style of art but Gordon Matta-Clark: Anarchitect really opened my mind. Impressive curation.
+2026-04-03,5,Positive,Google,Good variety of art and film. Barry McGee: Point the Finger was a bit dense but rewarding.
+2026-04-10,4,Positive,Yelp,BAMPFA always delivers. Saw Portrait of a Lady on Fire here — stunning print on the big screen.
+2026-04-11,5,Positive,Google,Great film programming. Caught a rare 35mm screening of Drive My Car. Pure cinema magic.
+2026-04-12,5,Positive,Google,Solid programming but parking is tough. The content more than makes up for it.
+2026-04-12,5,Positive,Yelp,Wonderful museum in the heart of Berkeley. The Hung Liu: Portraits of Promised Lands show was breathtaking.
+2026-04-13,3,Neutral,Google,Membership is absolutely worth it. Always something new and thought-provoking.
+2026-04-19,3,Neutral,Yelp,"Friendly staff, accessible space. The free First Thursday events are a great touch."
+2026-04-20,5,Positive,Yelp,Not my usual style of art but Jockum Nordström: The Lonely Ones really opened my mind. Impressive curation.
+2026-04-23,5,Positive,Yelp,Love this place. Staff are knowledgeable and the space feels intimate yet grand.
+2026-04-24,5,Positive,Google,The gallery spaces are beautifully curated. Hung Liu: Portraits of Promised Lands was my favorite show this year.
+2026-04-27,4,Positive,Google,Wonderful museum in the heart of Berkeley. The Tauba Auerbach: S v Z show was breathtaking.
+2026-04-29,5,Positive,Google,A gem of the Bay Area arts scene. Every visit feels special.
+2026-04-30,4,Positive,Yelp,A little pricey but the quality is always there. Loved the Drive My Car screening.

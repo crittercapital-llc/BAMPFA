@@ -1,0 +1,326 @@
+"""
+app.py — BAMPFA Audience Analytics Dashboard
+Home / Overview page
+
+Run with: streamlit run app.py
+"""
+
+import datetime
+import os
+
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+
+# ---------------------------------------------------------------------------
+# Page config (must be first Streamlit call)
+# ---------------------------------------------------------------------------
+
+st.set_page_config(
+    page_title="BAMPFA Audience Analytics",
+    page_icon="🎨",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+# ---------------------------------------------------------------------------
+# Custom CSS — dark museum feel
+# ---------------------------------------------------------------------------
+
+st.markdown(
+    """
+    <style>
+      /* Global font and background */
+      html, body, [class*="css"] {
+          font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      }
+
+      /* Sidebar */
+      [data-testid="stSidebar"] {
+          background-color: #0f0f1a;
+      }
+      [data-testid="stSidebar"] * {
+          color: #e0e0e0 !important;
+      }
+
+      /* Main header banner */
+      .bampfa-header {
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+          padding: 2rem 2.5rem 1.5rem 2.5rem;
+          border-radius: 12px;
+          margin-bottom: 1.5rem;
+      }
+      .bampfa-header h1 {
+          color: #e8c99a;
+          font-size: 2.1rem;
+          font-weight: 700;
+          margin: 0;
+          letter-spacing: 0.02em;
+      }
+      .bampfa-header p {
+          color: #a0b4c8;
+          font-size: 0.95rem;
+          margin: 0.4rem 0 0 0;
+      }
+      .bampfa-header .subtitle {
+          color: #c8a96e;
+          font-size: 0.78rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          margin-bottom: 0.4rem;
+      }
+
+      /* Metric cards */
+      [data-testid="metric-container"] {
+          background: #1e1e30;
+          border: 1px solid #2d2d4a;
+          border-radius: 10px;
+          padding: 1rem;
+      }
+      [data-testid="metric-container"] label {
+          color: #a0b4c8 !important;
+          font-size: 0.78rem !important;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+      }
+      [data-testid="metric-container"] [data-testid="stMetricValue"] {
+          color: #e8c99a !important;
+          font-size: 1.9rem !important;
+          font-weight: 700 !important;
+      }
+
+      /* Section headers */
+      .section-header {
+          color: #c8a96e;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          border-bottom: 1px solid #2d2d4a;
+          padding-bottom: 0.4rem;
+          margin: 1.5rem 0 1rem 0;
+      }
+
+      /* AI Briefing box */
+      .ai-briefing {
+          background: #141424;
+          border: 1px solid #2d2d4a;
+          border-left: 4px solid #c8a96e;
+          border-radius: 8px;
+          padding: 1.5rem;
+      }
+
+      /* Hide Streamlit default header */
+      #MainMenu {visibility: hidden;}
+      footer {visibility: hidden;}
+      header {visibility: hidden;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------------------------
+# Imports (after page config)
+# ---------------------------------------------------------------------------
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+from agents.data_agent import DataAgent
+from agents.insights_agent import InsightsAgent
+
+# ---------------------------------------------------------------------------
+# Sidebar — global date filter
+# ---------------------------------------------------------------------------
+
+with st.sidebar:
+    st.markdown("### BAMPFA Analytics")
+    st.markdown("---")
+    st.markdown("**Date Range Filter**")
+
+    min_date = datetime.date(2022, 1, 1)
+    max_date = datetime.date(2026, 4, 30)
+
+    date_start = st.date_input(
+        "From",
+        value=datetime.date(2025, 1, 1),
+        min_value=min_date,
+        max_value=max_date,
+        key="global_start",
+    )
+    date_end = st.date_input(
+        "To",
+        value=max_date,
+        min_value=min_date,
+        max_value=max_date,
+        key="global_end",
+    )
+
+    st.markdown("---")
+    st.caption("Data: Jan 2022 – Apr 2026")
+    st.caption("Refresh: Daily batch")
+    # TODO: Add live data source status indicators here
+
+# ---------------------------------------------------------------------------
+# Load data
+# ---------------------------------------------------------------------------
+
+@st.cache_resource
+def get_agent():
+    return DataAgent()
+
+agent = get_agent()
+
+# ---------------------------------------------------------------------------
+# Header
+# ---------------------------------------------------------------------------
+
+st.markdown(
+    """
+    <div class="bampfa-header">
+        <div class="subtitle">Audience Analytics Dashboard</div>
+        <h1>Berkeley Art Museum &amp; Pacific Film Archive</h1>
+        <p>Marketing Intelligence Platform &mdash; Updated daily &mdash; Internal use only</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------------------------
+# KPI Cards
+# ---------------------------------------------------------------------------
+
+kpis = agent.get_ytd_kpis()
+
+st.markdown('<div class="section-header">2026 Year-to-Date Highlights</div>', unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric(
+        label="Total Visitors YTD",
+        value=f"{kpis['ytd_visitors']:,}",
+        delta="+8% vs 2025",
+    )
+with col2:
+    st.metric(
+        label="Active Members",
+        value=f"{kpis['active_members']:,}",
+        delta="-3% lapse rate",
+    )
+with col3:
+    st.metric(
+        label="Avg Review Rating",
+        value=f"{kpis['avg_rating']} / 5",
+        delta=f"{kpis['avg_rating_delta']:+.2f} vs 2025",
+    )
+with col4:
+    st.metric(
+        label="YTD Revenue",
+        value=f"${kpis['ytd_revenue']:,.0f}",
+        delta="+12% vs 2025",
+    )
+
+# ---------------------------------------------------------------------------
+# Two-column charts: Attendance + Membership
+# ---------------------------------------------------------------------------
+
+st.markdown('<div class="section-header">Attendance &amp; Membership Trends</div>', unsafe_allow_html=True)
+
+chart_col1, chart_col2 = st.columns(2)
+
+# --- Monthly Attendance by Category ---
+with chart_col1:
+    attendance = agent.get_attendance_by_month()
+    fig_att = px.line(
+        attendance,
+        x="year_month_str",
+        y="quantity",
+        color="event_category",
+        title="Monthly Attendance: Art vs Film",
+        labels={"year_month_str": "Month", "quantity": "Visitors", "event_category": "Category"},
+        color_discrete_map={"Art": "#c8a96e", "Film": "#5b8cdb"},
+        template="plotly_dark",
+    )
+    fig_att.update_layout(
+        paper_bgcolor="#1e1e30",
+        plot_bgcolor="#141424",
+        legend_title_text="",
+        hovermode="x unified",
+        xaxis=dict(tickangle=45, tickfont=dict(size=10)),
+        margin=dict(l=0, r=0, t=40, b=0),
+    )
+    # Shade every other month for readability
+    st.plotly_chart(fig_att, use_container_width=True)
+
+# --- Membership Over Time ---
+with chart_col2:
+    mem_time = agent.get_membership_over_time()
+    fig_mem = go.Figure()
+    fig_mem.add_trace(go.Scatter(
+        x=mem_time["year_month"],
+        y=mem_time["active"],
+        name="Active",
+        line=dict(color="#5b8cdb", width=2),
+        fill="tozeroy",
+        fillcolor="rgba(91,140,219,0.15)",
+    ))
+    fig_mem.add_trace(go.Scatter(
+        x=mem_time["year_month"],
+        y=mem_time["lapsed"],
+        name="Lapsed",
+        line=dict(color="#e06c75", width=2, dash="dot"),
+    ))
+    fig_mem.update_layout(
+        title="Membership: Active vs Lapsed",
+        template="plotly_dark",
+        paper_bgcolor="#1e1e30",
+        plot_bgcolor="#141424",
+        legend_title_text="",
+        hovermode="x unified",
+        xaxis=dict(tickangle=45, tickfont=dict(size=10)),
+        margin=dict(l=0, r=0, t=40, b=0),
+        yaxis_title="Members",
+    )
+    st.plotly_chart(fig_mem, use_container_width=True)
+
+# ---------------------------------------------------------------------------
+# AI Daily Briefing
+# ---------------------------------------------------------------------------
+
+st.markdown('<div class="section-header">Today\'s AI Briefing</div>', unsafe_allow_html=True)
+
+@st.cache_data(ttl=3600, show_spinner="Generating AI briefing...")
+def get_briefing(data_summary: str) -> str:
+    insights = InsightsAgent(data_summary)
+    return insights.generate_dashboard_summary()
+
+data_summary = agent.get_data_summary_for_ai()
+briefing = get_briefing(data_summary)
+
+st.markdown(
+    f'<div class="ai-briefing">{briefing}</div>',
+    unsafe_allow_html=True,
+)
+if not os.getenv("ANTHROPIC_API_KEY"):
+    st.info("Tip: Add ANTHROPIC_API_KEY to .env to enable live AI briefings powered by Claude.")
+
+# ---------------------------------------------------------------------------
+# Quick navigation hints
+# ---------------------------------------------------------------------------
+
+st.markdown('<div class="section-header">Navigate the Dashboard</div>', unsafe_allow_html=True)
+
+nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
+
+with nav_col1:
+    st.info("**Attendance**\nDeep-dive into event performance, seasonality, and geography.")
+with nav_col2:
+    st.info("**Membership**\nTrack cohorts, lapse risk, and conversion opportunities.")
+with nav_col3:
+    st.info("**Purchase Behavior**\nLead times, channels, ticket types, and revenue patterns.")
+with nav_col4:
+    st.info("**AI Insights**\nAsk Claude anything about the BAMPFA audience data.")
