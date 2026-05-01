@@ -110,6 +110,31 @@ st.markdown(
           border-radius: 8px;
           padding: 1.5rem;
       }
+      .ai-briefing h2, .ai-briefing h3 {
+          color: #e8c99a !important;
+      }
+      .ai-briefing p, .ai-briefing li {
+          color: #d0d0e0 !important;
+      }
+
+      /* Chat messages */
+      .chat-message-user {
+          background: #1e1e30;
+          border: 1px solid #2d2d4a;
+          border-radius: 8px;
+          padding: 0.8rem 1rem;
+          margin-bottom: 0.5rem;
+          color: #e0e0e0;
+      }
+      .chat-message-assistant {
+          background: #141424;
+          border: 1px solid #2d2d4a;
+          border-left: 4px solid #c8a96e;
+          border-radius: 8px;
+          padding: 0.8rem 1rem;
+          margin-bottom: 1rem;
+          color: #d0d0d0;
+      }
 
       /* Hide Streamlit default header */
       #MainMenu {visibility: hidden;}
@@ -301,12 +326,70 @@ def get_briefing(data_summary: str) -> str:
 data_summary = agent.get_data_summary_for_ai()
 briefing = get_briefing(data_summary)
 
-st.markdown(
-    f'<div class="ai-briefing">{briefing}</div>',
-    unsafe_allow_html=True,
-)
-if not os.getenv("ANTHROPIC_API_KEY"):
-    st.info("Tip: Add ANTHROPIC_API_KEY to .env to enable live AI briefings powered by Claude.")
+# Render briefing in a styled container — use st.markdown so markdown renders properly
+st.markdown('<div class="ai-briefing">', unsafe_allow_html=True)
+st.markdown(briefing)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Check API key from both .env and Streamlit secrets
+def _has_api_key() -> bool:
+    if os.getenv("ANTHROPIC_API_KEY"):
+        return True
+    try:
+        return bool(st.secrets.get("ANTHROPIC_API_KEY", ""))
+    except Exception:
+        return False
+
+if not _has_api_key():
+    st.info("Tip: Add ANTHROPIC_API_KEY to Streamlit secrets to enable live AI briefings powered by Claude.")
+
+# ---------------------------------------------------------------------------
+# Inline follow-up chat on briefing
+# ---------------------------------------------------------------------------
+
+st.markdown('<div class="section-header">Ask a Follow-Up</div>', unsafe_allow_html=True)
+
+if "home_chat" not in st.session_state:
+    st.session_state.home_chat = []
+
+# Display previous Q&A
+for msg in st.session_state.home_chat:
+    if msg["role"] == "user":
+        st.markdown(
+            f'<div class="chat-message-user"><strong>You:</strong> {msg["content"]}</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            '<div class="chat-message-assistant"><strong>Claude:</strong></div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(msg["content"])
+
+# Input form
+with st.form(key="home_chat_form", clear_on_submit=True):
+    home_input = st.text_input(
+        "Ask Claude about the briefing or any audience trend",
+        placeholder="e.g. 'What should we do about the April web traffic dip?'",
+        label_visibility="collapsed",
+    )
+    submitted = st.form_submit_button("Ask Claude →", type="primary")
+
+if submitted and home_input.strip():
+    st.session_state.home_chat.append({"role": "user", "content": home_input.strip()})
+    insights_agent = InsightsAgent(data_summary)
+    with st.spinner("Claude is thinking..."):
+        response = insights_agent.ask_with_history(
+            home_input.strip(),
+            st.session_state.home_chat[:-1],
+        )
+    st.session_state.home_chat.append({"role": "assistant", "content": response})
+    st.rerun()
+
+if st.session_state.home_chat:
+    if st.button("Clear", type="secondary"):
+        st.session_state.home_chat = []
+        st.rerun()
 
 # ---------------------------------------------------------------------------
 # Quick navigation hints
