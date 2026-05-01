@@ -4,7 +4,8 @@
       "Bash(pip install *)",
       "Bash(python data/generate_data.py)",
       "Bash(python -c \"import pandas; print\\(pandas.__version__\\)\")",
-      "Bash(python -c \"import numpy; print\\(numpy.__version__\\)\")"
+      "Bash(python -c \"import numpy; print\\(numpy.__version__\\)\")",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

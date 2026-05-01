@@ -12,7 +12,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Read API key from .env locally, or from Streamlit Cloud secrets in production
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+if not ANTHROPIC_API_KEY:
+    try:
+        import streamlit as st
+        ANTHROPIC_API_KEY = st.secrets.get("ANTHROPIC_API_KEY", "")
+    except Exception:
+        pass
 
 _SYSTEM_PROMPT = """You are an expert arts and culture marketing analyst assistant for BAMPFA \
 (Berkeley Art Museum and Pacific Film Archive). You have deep knowledge of museum audience \
