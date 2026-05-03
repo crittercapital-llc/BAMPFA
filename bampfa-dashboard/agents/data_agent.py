@@ -380,6 +380,125 @@ class DataAgent:
         grouped["year_month_str"] = grouped["year_month"].astype(str)
         return grouped.sort_values("year_month_str")
 
+    def get_distance_distribution(self) -> pd.DataFrame:
+        """
+        Calculates approximate distance in miles from BAMPFA for each visitor zip code.
+        Uses a zip-code centroid lookup for Bay Area zips and haversine formula.
+        BAMPFA address: 2155 Center St, Berkeley, CA 94720 (~37.8724, -122.2595)
+        TODO: Replace with a full USPS zip-centroid database for national coverage.
+        """
+        import math
+
+        BAMPFA_LAT, BAMPFA_LON = 37.8724, -122.2595
+
+        # Bay Area zip centroid lookup (lat, lon) — covers ~95% of visitor zips
+        ZIP_CENTROIDS = {
+            "94704": (37.8682, -122.2595), "94705": (37.8569, -122.2427),
+            "94703": (37.8750, -122.2807), "94702": (37.8711, -122.2914),
+            "94709": (37.8793, -122.2691), "94710": (37.8664, -122.2988),
+            "94720": (37.8724, -122.2595), "94708": (37.8936, -122.2691),
+            "94707": (37.9004, -122.2807), "94706": (37.8847, -122.2988),
+            "94601": (37.7879, -122.2157), "94602": (37.7984, -122.2059),
+            "94609": (37.8368, -122.2600), "94611": (37.8368, -122.2157),
+            "94618": (37.8418, -122.2427), "94619": (37.8088, -122.1870),
+            "94606": (37.7879, -122.2427), "94608": (37.8418, -122.2807),
+            "94612": (37.8117, -122.2695), "94610": (37.8207, -122.2290),
+            "94107": (37.7648, -122.3959), "94110": (37.7484, -122.4156),
+            "94117": (37.7703, -122.4429), "94103": (37.7726, -122.4099),
+            "94118": (37.7816, -122.4613), "94122": (37.7626, -122.4816),
+            "94114": (37.7582, -122.4334), "94102": (37.7809, -122.4156),
+            "94109": (37.7924, -122.4222), "94115": (37.7857, -122.4390),
+            "94501": (37.7648, -122.2414), "94502": (37.7484, -122.2334),
+            "94577": (37.6879, -122.1591), "94578": (37.6984, -122.1295),
+            "94580": (37.6817, -122.1157), "94545": (37.6368, -122.0807),
+            "94010": (37.5879, -122.3491), "94014": (37.7068, -122.4634),
+            "94015": (37.6879, -122.4816), "94403": (37.5484, -122.2914),
+            "94025": (37.4379, -122.1751), "94301": (37.4379, -122.1295),
+            "94305": (37.4268, -122.1670), "94309": (37.4184, -122.1157),
+            "95814": (38.5817, -121.4944), "94941": (37.9004, -122.5259),
+            "94901": (37.9736, -122.5314), "94925": (37.9246, -122.5259),
+        }
+
+        def haversine(lat1, lon1, lat2, lon2):
+            R = 3958.8  # Earth radius in miles
+            dlat = math.radians(lat2 - lat1)
+            dlon = math.radians(lon2 - lon1)
+            a = math.sin(dlat/2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon/2)**2
+            return R * 2 * math.asin(math.sqrt(a))
+
+        def distance_miles(zip_code):
+            coords = ZIP_CENTROIDS.get(str(zip_code))
+            if coords:
+                return round(haversine(BAMPFA_LAT, BAMPFA_LON, coords[0], coords[1]), 1)
+            return None
+
+        def distance_bucket(miles):
+            if miles is None:
+                return "Unknown"
+            elif miles <= 3:
+                return "0–3 mi (Walking)"
+            elif miles <= 10:
+                return "3–10 mi (Local)"
+            elif miles <= 25:
+                return "10–25 mi (Regional)"
+            elif miles <= 50:
+                return "25–50 mi (Day Trip)"
+            else:
+                return "50+ mi (Destination)"
+
+        zip_dist = self.get_zip_distribution().copy()
+        zip_dist["distance_miles"] = zip_dist["zip_code"].apply(distance_miles)
+        zip_dist["distance_bucket"] = zip_dist["distance_miles"].apply(distance_bucket)
+        return zip_dist
+
+    def get_press_spike_correlation(self) -> pd.DataFrame:
+        """
+        Identifies months with above-average web traffic spikes and shows
+        attendance in the same and following month. Proxies for press coverage
+        impact until earned media data is available.
+        TODO: Replace traffic spike proxy with actual press mention data
+              from a media monitoring tool (e.g. Meltwater, Cision).
+        """
+        merged = self.get_attendance_vs_traffic().copy()
+        avg_sessions = merged["sessions"].mean()
+        std_sessions = merged["sessions"].std()
+        merged["is_spike"] = merged["sessions"] > (avg_sessions + 0.75 * std_sessions)
+        merged["sessions_vs_avg"] = ((merged["sessions"] - avg_sessions) / avg_sessions * 100).round(1)
+        merged["visitors_vs_avg"] = ((merged["quantity"] - merged["quantity"].mean()) / merged["quantity"].mean() * 100).round(1)
+        return merged
+
+    def get_vx_staffing_forecast(self) -> pd.DataFrame:
+        """
+        Translates historical monthly attendance into VX staffing recommendations.
+        Uses a simple staffing ratio model:
+          - 1 floor staff per 80 visitors/day (industry standard for mid-size museums)
+          - Assumes 22 open days/month average
+          - Adds 20% buffer for G1 opening weekends
+        TODO: Refine ratios using actual BAMPFA scheduling data from operations team.
+        """
+        monthly = (
+            self.transactions.groupby(["year", "month"])
+            .agg(total_visitors=("quantity", "sum"))
+            .reset_index()
+        )
+        monthly["avg_daily_visitors"] = (monthly["total_visitors"] / 22).round(0).astype(int)
+        monthly["base_staff_needed"] = (monthly["avg_daily_visitors"] / 80).apply(
+            lambda x: max(2, round(x))
+        )
+
+        # Flag G1 opening months (proxy: top-quartile attendance months)
+        q75 = monthly["total_visitors"].quantile(0.75)
+        monthly["is_peak"] = monthly["total_visitors"] >= q75
+        monthly["recommended_staff"] = monthly.apply(
+            lambda r: int(r["base_staff_needed"] * 1.2) if r["is_peak"] else r["base_staff_needed"],
+            axis=1,
+        )
+        monthly["month_name"] = monthly["month"].apply(
+            lambda m: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][m-1]
+        )
+        monthly["label"] = monthly["month_name"] + " " + monthly["year"].astype(str)
+        return monthly.sort_values(["year", "month"])
+
     def get_ytd_kpis(self) -> dict:
         """Top-level KPIs for the current year (2026 YTD)."""
         current_year = 2026
