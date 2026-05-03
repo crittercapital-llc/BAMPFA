@@ -25,7 +25,6 @@ from scipy import stats  # for Pearson r; scipy is a plotly transitive dep
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from agents.data_agent import DataAgent
-from agents.public_data_agent import PublicDataAgent
 
 # ---------------------------------------------------------------------------
 # Page config
@@ -105,38 +104,51 @@ GREEN   = "#98c379"
 
 # ---------------------------------------------------------------------------
 # Load data (cached)
+# Bug fix: PublicDataAgent is instantiated directly inside each @st.cache_data
+# function instead of being shared via @st.cache_resource. Mixing
+# cache_resource objects with cache_data causes silent serialisation failures
+# on Streamlit Cloud.
 # ---------------------------------------------------------------------------
 
 @st.cache_resource
 def get_data_agent() -> DataAgent:
     return DataAgent()
 
-@st.cache_resource
-def get_public_agent() -> PublicDataAgent:
-    return PublicDataAgent()
-
-@st.cache_data(ttl=3600, show_spinner="Fetching press coverage…")
-def load_press_coverage() -> pd.DataFrame:
-    return get_public_agent().get_all_press_coverage()
-
 @st.cache_data(ttl=3600, show_spinner="Fetching Reddit mentions…")
 def load_reddit() -> pd.DataFrame:
-    return get_public_agent().get_reddit_mentions()
+    from agents.public_data_agent import PublicDataAgent
+    return PublicDataAgent().get_reddit_mentions()
 
 @st.cache_data(ttl=3600, show_spinner="Fetching Google reviews…")
 def load_reviews() -> pd.DataFrame:
-    return get_public_agent().get_google_reviews()
+    from agents.public_data_agent import PublicDataAgent
+    return PublicDataAgent().get_google_reviews()
+
+@st.cache_data(ttl=3600, show_spinner="Fetching press coverage…")
+def load_press_coverage() -> pd.DataFrame:
+    from agents.public_data_agent import PublicDataAgent
+    return PublicDataAgent().get_all_press_coverage()
 
 @st.cache_data(ttl=3600)
 def load_press_timeline() -> pd.DataFrame:
-    return get_public_agent().get_press_timeline()
+    from agents.public_data_agent import PublicDataAgent
+    return PublicDataAgent().get_press_timeline()
 
 @st.cache_data(ttl=3600)
 def load_source_status() -> dict:
-    return get_public_agent().get_source_status()
+    from agents.public_data_agent import PublicDataAgent
+    return PublicDataAgent().get_source_status()
 
-data_agent   = get_data_agent()
-public_agent = get_public_agent()
+data_agent = get_data_agent()
+
+# ---------------------------------------------------------------------------
+# Sidebar — Refresh button
+# ---------------------------------------------------------------------------
+
+with st.sidebar:
+    if st.button("🔄 Refresh All Data"):
+        st.cache_data.clear()
+        st.rerun()
 
 # ---------------------------------------------------------------------------
 # Header
@@ -163,7 +175,7 @@ label_map = {
     "reddit":          "Reddit (PRAW)",
     "google_news_rss": "Google News RSS",
     "newsapi":         "NewsAPI.org",
-    "google_reviews":  "Google Reviews (Places API)",
+    "google_reviews":  "Google Reviews (SerpAPI)",
 }
 
 status_cols = st.columns(len(status))
@@ -527,10 +539,9 @@ st.markdown('<div class="section-header">Google Reviews</div>', unsafe_allow_htm
 review_source_status = status.get("google_reviews", "demo")
 if review_source_status == "demo":
     st.info(
-        "Google Reviews are in **demo mode** (no Places API key). "
-        "The Places API returns at most **5 reviews** per query — a platform limitation. "
-        "For comprehensive review data, consider a third-party aggregator or direct "
-        "Google Business Profile export.",
+        "Google Reviews are in **demo mode** (no SerpAPI key). "
+        "With a live SerpAPI key the free tier supports up to ~50 reviews with pagination. "
+        "Add `SERPAPI_KEY` to `.env` to activate live review fetching.",
         icon="ℹ️",
     )
 
@@ -539,11 +550,10 @@ reviews_df = load_reviews()
 if reviews_df.empty:
     st.info("No review data available.")
 else:
-    # Metrics
+    # --- Metrics ---
     rev_col1, rev_col2, rev_col3 = st.columns(3)
     with rev_col1:
         avg_r = reviews_df["rating"].mean()
-        stars_display = "★" * round(avg_r) + "☆" * (5 - round(avg_r))
         st.metric("Average Rating", f"{avg_r:.2f} / 5.0", help="Based on available reviews")
     with rev_col2:
         five_star_pct = (reviews_df["rating"] == 5).mean() * 100
@@ -551,7 +561,7 @@ else:
     with rev_col3:
         st.metric("Total Reviews", f"{len(reviews_df):,}")
 
-    # Rating distribution
+    # --- Rating distribution bar chart ---
     rating_counts = (
         reviews_df["rating"]
         .value_counts()
@@ -577,14 +587,62 @@ else:
     fig_ratings.update_layout(showlegend=False, **CHART_LAYOUT)
     st.plotly_chart(fig_ratings, use_container_width=True)
 
-    # Recent reviews as styled cards
-    st.markdown("**Recent Reviews**")
-    recent_reviews = reviews_df.sort_values("date", ascending=False).head(10)
+    # -----------------------------------------------------------------------
+    # Interactive reviews table
+    # Bug fix: replaced static HTML-only rendering with filterable/sortable
+    # st.dataframe, keeping styled cards only for the top-5 visual showcase.
+    # -----------------------------------------------------------------------
 
-    for _, row in recent_reviews.iterrows():
+    st.markdown("**Browse Reviews**")
+
+    filter_col, sort_col = st.columns(2)
+    with filter_col:
+        min_rating = st.slider("Filter by minimum rating", 1, 5, 1)
+    with sort_col:
+        sort_by = st.selectbox("Sort by", ["Newest First", "Highest Rating", "Lowest Rating"])
+
+    # Apply filter
+    filtered_reviews = reviews_df[reviews_df["rating"] >= min_rating].copy()
+
+    # Apply sort
+    if sort_by == "Newest First":
+        filtered_reviews = filtered_reviews.sort_values("date", ascending=False)
+    elif sort_by == "Highest Rating":
+        filtered_reviews = filtered_reviews.sort_values("rating", ascending=False)
+    else:  # Lowest Rating
+        filtered_reviews = filtered_reviews.sort_values("rating", ascending=True)
+
+    filtered_reviews = filtered_reviews.reset_index(drop=True)
+
+    # Build display DataFrame
+    display_df = filtered_reviews.copy()
+    display_df["Date"] = pd.to_datetime(display_df["date"]).dt.strftime("%Y-%m-%d")
+    display_df["Rating"] = display_df["rating"].apply(lambda r: "★" * int(r) + "☆" * (5 - int(r)))
+    display_df["Review Text"] = display_df.get("text", pd.Series(dtype=str)).fillna("")
+    display_df["Author"] = display_df.get("author", pd.Series(dtype=str)).fillna("Anonymous")
+
+    st.dataframe(
+        display_df[["Date", "Rating", "Review Text", "Author"]],
+        column_config={
+            "Date":        st.column_config.TextColumn("Date",        width="small"),
+            "Rating":      st.column_config.TextColumn("Rating",      width="small"),
+            "Review Text": st.column_config.TextColumn("Review Text", width="large"),
+            "Author":      st.column_config.TextColumn("Author",      width="medium"),
+        },
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.caption(f"Showing {len(filtered_reviews):,} of {len(reviews_df):,} reviews")
+
+    # --- Top 5 reviews as styled HTML cards (visual showcase) ---
+    st.markdown("**Top 5 Reviews**")
+    top5 = filtered_reviews.head(5)
+
+    for _, row in top5.iterrows():
         rating_val = int(row.get("rating", 3))
         stars_str = "★" * rating_val + "☆" * (5 - rating_val)
-        date_str = pd.Timestamp(row["date"]).strftime("%b %d, %Y") if pd.notna(row["date"]) else ""
+        date_str = pd.Timestamp(row["date"]).strftime("%b %d, %Y") if pd.notna(row.get("date")) else ""
         text = row.get("text", "")
         author = row.get("author", "Anonymous")
         st.markdown(
