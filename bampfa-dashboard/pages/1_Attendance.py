@@ -235,26 +235,59 @@ fig_overlay.update_layout(
 st.plotly_chart(fig_overlay, use_container_width=True)
 
 # ---------------------------------------------------------------------------
-# Section 5: Geographic Distribution
+# Section 5: Geographic Distribution — Distance Traveled
 # ---------------------------------------------------------------------------
 
-st.markdown('<div class="section-header">Geographic Visitor Distribution</div>', unsafe_allow_html=True)
-st.caption("Visitor counts by zip code — weighted toward Berkeley/Oakland core, with reach into SF and beyond.")
+st.markdown('<div class="section-header">How Far Are Visitors Traveling?</div>', unsafe_allow_html=True)
+st.caption("Approximate distance from BAMPFA (2155 Center St, Berkeley) based on visitor zip codes.")
 
-zip_data = agent.get_zip_distribution()
+dist_data = agent.get_distance_distribution()
 
-geo_col1, geo_col2 = st.columns([3, 2])
+geo_col1, geo_col2 = st.columns([2, 3])
 
 with geo_col1:
+    bucket_summary = (
+        dist_data.groupby("distance_bucket")["visitors"]
+        .sum()
+        .reset_index()
+        .sort_values("visitors", ascending=False)
+    )
+    bucket_order = ["0–3 mi (Walking)", "3–10 mi (Local)", "10–25 mi (Regional)", "25–50 mi (Day Trip)", "50+ mi (Destination)", "Unknown"]
+    bucket_summary["distance_bucket"] = pd.Categorical(bucket_summary["distance_bucket"], categories=bucket_order, ordered=True)
+    bucket_summary = bucket_summary.sort_values("distance_bucket")
+
+    fig_bucket = px.bar(
+        bucket_summary,
+        x="distance_bucket",
+        y="visitors",
+        color="distance_bucket",
+        labels={"distance_bucket": "Distance from BAMPFA", "visitors": "Total Visitors"},
+        title="Visitors by Distance Traveled",
+        template="plotly_dark",
+        color_discrete_sequence=["#5b8cdb", "#c8a96e", "#e06c75", "#98c379", "#c678dd", "#888888"],
+    )
+    fig_bucket.update_layout(
+        paper_bgcolor="#1e1e30",
+        plot_bgcolor="#141424",
+        showlegend=False,
+        height=360,
+        margin=dict(l=0, r=0, t=40, b=80),
+        xaxis=dict(tickangle=30, tickfont=dict(size=10)),
+    )
+    st.plotly_chart(fig_bucket, use_container_width=True)
+
+with geo_col2:
+    # Top 20 zips with distance
+    top_zips = dist_data.dropna(subset=["distance_miles"]).head(20).copy()
     fig_zip = px.bar(
-        zip_data.head(20),
+        top_zips,
         x="visitors",
         y="zip_code",
         orientation="h",
-        color="region",
-        labels={"visitors": "Total Visitors", "zip_code": "Zip Code", "region": "Region"},
-        title="Top 20 Zip Codes by Visitor Count",
-        color_discrete_sequence=px.colors.qualitative.Pastel,
+        color="distance_miles",
+        color_continuous_scale="Blues",
+        labels={"visitors": "Total Visitors", "zip_code": "Zip Code", "distance_miles": "Miles"},
+        title="Top 20 Zip Codes — Colored by Distance",
         template="plotly_dark",
     )
     fig_zip.update_layout(
@@ -263,34 +296,149 @@ with geo_col1:
         yaxis=dict(autorange="reversed"),
         height=480,
         margin=dict(l=0, r=0, t=40, b=0),
-        legend_title_text="Region",
     )
     st.plotly_chart(fig_zip, use_container_width=True)
 
-with geo_col2:
-    region_summary = (
-        zip_data.groupby("region")["visitors"]
-        .sum()
-        .reset_index()
-        .sort_values("visitors", ascending=False)
-    )
-    fig_region = px.pie(
-        region_summary,
-        values="visitors",
-        names="region",
-        title="Visitors by Region",
-        template="plotly_dark",
-        hole=0.35,
-        color_discrete_sequence=px.colors.qualitative.Pastel,
-    )
-    fig_region.update_layout(
-        paper_bgcolor="#1e1e30",
-        height=300,
-        margin=dict(l=0, r=0, t=40, b=0),
-    )
-    st.plotly_chart(fig_region, use_container_width=True)
+# Distance insight callouts
+d_cols = st.columns(4)
+for i, bucket in enumerate(["0–3 mi (Walking)", "3–10 mi (Local)", "10–25 mi (Regional)", "25–50 mi (Day Trip)"]):
+    row = bucket_summary[bucket_summary["distance_bucket"] == bucket]
+    count = int(row["visitors"].values[0]) if len(row) else 0
+    total = bucket_summary["visitors"].sum()
+    pct = round(count / total * 100, 1) if total else 0
+    with d_cols[i]:
+        st.metric(bucket.split("(")[0].strip(), f"{count:,}", f"{pct}% of visitors")
 
-    # Summary table
-    region_summary["visitors"] = region_summary["visitors"].map("{:,}".format)
-    region_summary.columns = ["Region", "Visitors"]
-    st.dataframe(region_summary, use_container_width=True, hide_index=True)
+# ---------------------------------------------------------------------------
+# Section 6: Press Coverage Correlation
+# ---------------------------------------------------------------------------
+
+st.markdown('<div class="section-header">Web Traffic Spikes vs. Attendance — Press Correlation Proxy</div>', unsafe_allow_html=True)
+st.caption(
+    "Months with above-average web traffic (potential press coverage or campaigns) highlighted in orange. "
+    "Compare with attendance to spot lift. Not causal — correlational only. "
+    "⚠️ Replace with actual press mention data when available."
+)
+
+spike_data = agent.get_press_spike_correlation()
+
+fig_spike = go.Figure()
+
+# Shade spike months
+for _, row in spike_data[spike_data["is_spike"]].iterrows():
+    fig_spike.add_vrect(
+        x0=row["year_month_str"], x1=row["year_month_str"],
+        fillcolor="rgba(200,169,110,0.15)", line_width=0,
+    )
+
+fig_spike.add_trace(go.Bar(
+    x=spike_data["year_month_str"],
+    y=spike_data["quantity"],
+    name="Visitors",
+    marker_color=[
+        "#c8a96e" if s else "#2d2d4a" for s in spike_data["is_spike"]
+    ],
+    yaxis="y1",
+))
+fig_spike.add_trace(go.Scatter(
+    x=spike_data["year_month_str"],
+    y=spike_data["sessions"],
+    name="Web Sessions",
+    line=dict(color="#5b8cdb", width=2),
+    yaxis="y2",
+))
+fig_spike.update_layout(
+    template="plotly_dark",
+    paper_bgcolor="#1e1e30",
+    plot_bgcolor="#141424",
+    hovermode="x unified",
+    title="Attendance (bars) vs Web Sessions (line) — Orange = Traffic Spike Month",
+    xaxis=dict(tickangle=45, tickfont=dict(size=9)),
+    yaxis=dict(title="Visitors", titlefont=dict(color="#c8a96e")),
+    yaxis2=dict(
+        title="Web Sessions",
+        titlefont=dict(color="#5b8cdb"),
+        overlaying="y",
+        side="right",
+    ),
+    legend=dict(orientation="h", yanchor="bottom", y=1.02),
+    height=400,
+    margin=dict(l=0, r=0, t=50, b=0),
+)
+st.plotly_chart(fig_spike, use_container_width=True)
+
+# Spike summary table
+spike_summary = spike_data[spike_data["is_spike"]][
+    ["year_month_str", "sessions", "sessions_vs_avg", "quantity", "visitors_vs_avg"]
+].copy()
+spike_summary.columns = ["Month", "Web Sessions", "Sessions vs Avg (%)", "Visitors", "Attendance vs Avg (%)"]
+st.caption("**Spike months** — web traffic significantly above average:")
+st.dataframe(spike_summary, use_container_width=True, hide_index=True)
+
+# ---------------------------------------------------------------------------
+# Section 7: VX Staff Scheduling Forecast
+# ---------------------------------------------------------------------------
+
+st.markdown('<div class="section-header">VX Staff Scheduling Forecast</div>', unsafe_allow_html=True)
+st.caption(
+    "Recommended floor staff based on historical attendance patterns. "
+    "Model assumes 1 staff per 80 visitors/day, 22 open days/month. "
+    "Peak months (top 25% attendance) include a 20% buffer for G1 opening weekends. "
+    "⚠️ Calibrate ratios with your operations team before using for actual scheduling."
+)
+
+staffing = agent.get_vx_staffing_forecast()
+recent_staffing = staffing[staffing["year"] >= 2025].copy()
+
+staff_col1, staff_col2 = st.columns([3, 2])
+
+with staff_col1:
+    fig_staff = go.Figure()
+    fig_staff.add_trace(go.Bar(
+        x=recent_staffing["label"],
+        y=recent_staffing["total_visitors"],
+        name="Total Visitors",
+        marker_color=[
+            "#c8a96e" if p else "#2d4a6e" for p in recent_staffing["is_peak"]
+        ],
+        yaxis="y1",
+    ))
+    fig_staff.add_trace(go.Scatter(
+        x=recent_staffing["label"],
+        y=recent_staffing["recommended_staff"],
+        name="Recommended VX Staff",
+        line=dict(color="#e06c75", width=3),
+        mode="lines+markers",
+        marker=dict(size=8),
+        yaxis="y2",
+    ))
+    fig_staff.update_layout(
+        template="plotly_dark",
+        paper_bgcolor="#1e1e30",
+        plot_bgcolor="#141424",
+        title="Attendance vs Recommended VX Staff (2025–2026) — Gold = Peak/G1 Month",
+        hovermode="x unified",
+        xaxis=dict(tickangle=45, tickfont=dict(size=9)),
+        yaxis=dict(title="Total Visitors", titlefont=dict(color="#c8a96e")),
+        yaxis2=dict(
+            title="Staff Needed",
+            titlefont=dict(color="#e06c75"),
+            overlaying="y",
+            side="right",
+            rangemode="tozero",
+        ),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        height=400,
+        margin=dict(l=0, r=0, t=50, b=0),
+    )
+    st.plotly_chart(fig_staff, use_container_width=True)
+
+with staff_col2:
+    st.markdown("**Staffing Schedule — 2026 YTD**")
+    display_staff = recent_staffing[recent_staffing["year"] == 2026][
+        ["label", "total_visitors", "avg_daily_visitors", "recommended_staff", "is_peak"]
+    ].copy()
+    display_staff["is_peak"] = display_staff["is_peak"].apply(lambda x: "🟠 Peak" if x else "")
+    display_staff.columns = ["Month", "Total Visitors", "Avg Daily", "VX Staff Rec.", "Notes"]
+    st.dataframe(display_staff, use_container_width=True, hide_index=True)
+    st.caption("🟠 Peak = top-quartile attendance month, includes G1 opening buffer.")
