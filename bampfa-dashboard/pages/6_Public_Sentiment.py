@@ -382,10 +382,10 @@ else:
     fig_dual.update_layout(
         title="Attendance vs. Press Coverage (dual axis)",
         xaxis=dict(title="Month", tickangle=45, tickfont=dict(size=9)),
-        yaxis=dict(title="Attendance (visitors)", titlefont=dict(color=GOLD)),
+        yaxis=dict(title="Attendance (visitors)", title_font=dict(color=GOLD)),
         yaxis2=dict(
             title="Article Count",
-            titlefont=dict(color=BLUE),
+            title_font=dict(color=BLUE),
             overlaying="y",
             side="right",
             showgrid=False,
