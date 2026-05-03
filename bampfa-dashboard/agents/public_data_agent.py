@@ -1,17 +1,19 @@
 """
 agents/public_data_agent.py
 PublicDataAgent: fetches real-world earned media data for BAMPFA from
-Reddit, Google News RSS, NewsAPI, and Google Places (reviews).
+Reddit, Google News RSS, NewsAPI, and SerpAPI (Google Reviews).
 
 Each method falls back gracefully to realistic synthetic data when API
 credentials are absent or when network/rate-limit errors occur.
 
-Environment variables consumed:
+Environment variables / Streamlit secrets consumed:
     REDDIT_CLIENT_ID        — Reddit OAuth app client ID
     REDDIT_CLIENT_SECRET    — Reddit OAuth app secret
     REDDIT_USER_AGENT       — e.g. "bampfa-dashboard/1.0"
     NEWSAPI_KEY             — NewsAPI.org key (free tier: ~1 month history)
-    GOOGLE_PLACES_API_KEY   — Google Cloud Places API key
+    SERPAPI_KEY             — SerpAPI key (free tier: 100 searches/month)
+                              Used for Google Reviews via google_maps_reviews engine.
+                              BAMPFA ludocid: 16873726739869704312
 
 TODO: Add Twitter/X mentions via Academic Research API or snscrape once
       credentials are available.
@@ -295,12 +297,27 @@ class PublicDataAgent:
     REDDIT_SEARCH_TERMS = ["BAMPFA", "Berkeley Art Museum", "Pacific Film Archive"]
     BAMPFA_PLACE_QUERY = "BAMPFA Berkeley Art Museum"
 
+    # BAMPFA's Google Maps location ID — from the Google Maps URL ludocid param
+    BAMPFA_LUDOCID = "16873726739869704312"
+
     def __init__(self):
-        self._reddit_client_id = os.getenv("REDDIT_CLIENT_ID", "")
-        self._reddit_client_secret = os.getenv("REDDIT_CLIENT_SECRET", "")
-        self._reddit_user_agent = os.getenv("REDDIT_USER_AGENT", "bampfa-dashboard/1.0")
-        self._newsapi_key = os.getenv("NEWSAPI_KEY", "")
-        self._google_places_key = os.getenv("GOOGLE_PLACES_API_KEY", "")
+        self._reddit_client_id     = self._get_secret("REDDIT_CLIENT_ID")
+        self._reddit_client_secret = self._get_secret("REDDIT_CLIENT_SECRET")
+        self._reddit_user_agent    = self._get_secret("REDDIT_USER_AGENT") or "bampfa-dashboard/1.0"
+        self._newsapi_key          = self._get_secret("NEWSAPI_KEY")
+        self._serpapi_key          = self._get_secret("SERPAPI_KEY")
+
+    @staticmethod
+    def _get_secret(key: str) -> str:
+        """Read from env var first, then Streamlit secrets (cloud deployment)."""
+        val = os.getenv(key, "")
+        if not val:
+            try:
+                import streamlit as st
+                val = st.secrets.get(key, "") or ""
+            except Exception:
+                pass
+        return val
 
     # ------------------------------------------------------------------
     # Status helpers
@@ -312,7 +329,7 @@ class PublicDataAgent:
             "reddit": "live" if (self._reddit_client_id and self._reddit_client_secret) else "demo",
             "google_news_rss": "live",  # no key needed
             "newsapi": "live" if self._newsapi_key else "demo",
-            "google_reviews": "live" if self._google_places_key else "demo",
+            "google_reviews": "live" if self._serpapi_key else "demo",
         }
 
     # ------------------------------------------------------------------
@@ -537,82 +554,87 @@ class PublicDataAgent:
 
     def get_google_reviews(self) -> pd.DataFrame:
         """
-        Fetches BAMPFA Google reviews via the Places API.
-        NOTE: Google Places API only returns the 5 most recent reviews per
-              place result — this is a hard platform limitation, not a code
-              issue. For larger review datasets consider a third-party review
-              aggregator or direct Google Business Profile export.
+        Fetches BAMPFA Google reviews via SerpAPI (google_maps_reviews engine).
+        Uses BAMPFA's known ludocid so no place search step is needed.
+        SerpAPI free tier: 100 searches/month — sufficient for monthly refresh.
+        Paginates up to 5 pages (~50 reviews) to maximise coverage.
+
         Returns DataFrame: date, rating, text, author, source.
-        Falls back to synthetic data if GOOGLE_PLACES_API_KEY is missing.
+        Falls back to synthetic data if SERPAPI_KEY is missing or on error.
         """
-        if not self._google_places_key:
-            print("[PublicDataAgent] Google Places: no key — returning dummy reviews")
+        if not self._serpapi_key:
+            print("[PublicDataAgent] SerpAPI: no key — returning dummy reviews")
             return _generate_dummy_reviews()
 
         try:
-            import requests  # stdlib / already in most envs
+            import requests
 
-            print("[PublicDataAgent] Google Places: searching for BAMPFA place ID …")
-
-            # Step 1: Find Place ID
-            find_url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
-            find_resp = requests.get(
-                find_url,
-                params={
-                    "input": self.BAMPFA_PLACE_QUERY,
-                    "inputtype": "textquery",
-                    "fields": "place_id,name",
-                    "key": self._google_places_key,
-                },
-                timeout=10,
-            )
-            find_data = find_resp.json()
-            candidates = find_data.get("candidates", [])
-            if not candidates:
-                raise ValueError("No place candidates returned")
-            place_id = candidates[0]["place_id"]
-            print(f"[PublicDataAgent] Google Places: place_id={place_id}")
-
-            # Step 2: Get Place Details including reviews
-            # Google Places API returns at most 5 reviews (platform limitation)
-            details_url = "https://maps.googleapis.com/maps/api/place/details/json"
-            details_resp = requests.get(
-                details_url,
-                params={
-                    "place_id": place_id,
-                    "fields": "reviews,rating",
-                    "key": self._google_places_key,
-                },
-                timeout=10,
-            )
-            details_data = details_resp.json()
-            result = details_data.get("result", {})
-            raw_reviews = result.get("reviews", [])
-
-            if not raw_reviews:
-                print("[PublicDataAgent] Google Places: no reviews returned — falling back to dummy data")
-                return _generate_dummy_reviews()
+            print("[PublicDataAgent] SerpAPI: fetching BAMPFA Google reviews …")
 
             rows = []
-            for r in raw_reviews:
-                ts = r.get("time", 0)
-                date = pd.Timestamp.fromtimestamp(ts) if ts else pd.Timestamp.now()
-                text = r.get("text", "")
-                rows.append({
-                    "date": date,
-                    "rating": int(r.get("rating", 3)),
-                    "text": text,
-                    "author": r.get("author_name", "Anonymous"),
-                    "source": "google_places_live",
-                })
+            next_page_token = None
+            pages_fetched = 0
+            max_pages = 5  # cap at 5 API calls on free tier
+
+            while pages_fetched < max_pages:
+                params = {
+                    "engine": "google_maps_reviews",
+                    "ludocid": self.BAMPFA_LUDOCID,
+                    "api_key": self._serpapi_key,
+                    "hl": "en",
+                    "sort_by": "newestFirst",
+                }
+                if next_page_token:
+                    params["next_page_token"] = next_page_token
+
+                resp = requests.get(
+                    "https://serpapi.com/search",
+                    params=params,
+                    timeout=15,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+
+                reviews = data.get("reviews", [])
+                if not reviews:
+                    break
+
+                for r in reviews:
+                    iso_date = r.get("iso_date") or r.get("date", "")
+                    try:
+                        date = pd.Timestamp(iso_date)
+                    except Exception:
+                        date = pd.Timestamp.now()
+
+                    text = r.get("snippet", "") or r.get("text", "")
+                    user = r.get("user", {})
+                    author = user.get("name", "Anonymous") if isinstance(user, dict) else "Anonymous"
+
+                    rows.append({
+                        "date": date,
+                        "rating": int(r.get("rating", 3)),
+                        "text": text,
+                        "author": author,
+                        "source": "serpapi_google_reviews",
+                    })
+
+                pages_fetched += 1
+                next_page_token = data.get("serpapi_pagination", {}).get("next_page_token")
+                if not next_page_token:
+                    break  # no more pages
+
+            if not rows:
+                print("[PublicDataAgent] SerpAPI: no reviews returned — falling back to dummy data")
+                return _generate_dummy_reviews()
 
             df = pd.DataFrame(rows)
-            df["date"] = pd.to_datetime(df["date"])
-            print(f"[PublicDataAgent] Google Places: fetched {len(df)} reviews (live — platform cap: 5)")
+            df["date"] = pd.to_datetime(df["date"], errors="coerce")
+            df = df.dropna(subset=["date"])
+            print(f"[PublicDataAgent] SerpAPI: fetched {len(df)} Google reviews (live)")
             return df.sort_values("date", ascending=False).reset_index(drop=True)
 
         except Exception as e:
-            warnings.warn(f"[PublicDataAgent] Google Places error: {e} — falling back to dummy data")
+            warnings.warn(f"[PublicDataAgent] SerpAPI error: {e} — falling back to dummy data")
             return _generate_dummy_reviews()
 
     # ------------------------------------------------------------------
