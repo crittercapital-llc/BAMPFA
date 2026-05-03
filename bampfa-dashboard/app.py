@@ -397,7 +397,7 @@ if st.session_state.home_chat:
 
 st.markdown('<div class="section-header">Navigate the Dashboard</div>', unsafe_allow_html=True)
 
-nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns(5)
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5, nav_col6 = st.columns(6)
 
 with nav_col1:
     st.page_link("pages/1_Attendance.py", label="📊 Attendance", use_container_width=True)
@@ -414,3 +414,6 @@ with nav_col4:
 with nav_col5:
     st.page_link("pages/5_Event_Forecast.py", label="🔮 Event Forecaster", use_container_width=True)
     st.caption("Forecast attendance & staffing for a new film or exhibit")
+with nav_col6:
+    st.page_link("pages/6_Public_Sentiment.py", label="🌐 Public Sentiment", use_container_width=True)
+    st.caption("Press coverage, Reddit chatter, Google reviews")
