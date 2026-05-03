@@ -499,6 +499,48 @@ class DataAgent:
         monthly["label"] = monthly["month_name"] + " " + monthly["year"].astype(str)
         return monthly.sort_values(["year", "month"])
 
+    def get_historical_comps(self, category: str, month: int) -> pd.DataFrame:
+        """
+        Returns historical events of the same category (Art/Film) in the same
+        calendar month, ranked by attendance. Used as comps for the forecaster.
+        """
+        df = self.transactions.copy()
+        same_cat = df[df["event_category"] == category]
+        same_month = same_cat[same_cat["month"] == month]
+        if len(same_month) == 0:
+            same_month = same_cat  # fallback to all months if no data
+
+        comps = (
+            same_month.groupby(["event_name", "event_category"])
+            .agg(
+                total_visitors=("quantity", "sum"),
+                total_revenue=("revenue", "sum"),
+                avg_ticket=("ticket_price", "mean"),
+                transactions=("transaction_id", "count"),
+                online_pct=("channel", lambda x: round((x == "Online").mean() * 100, 1)),
+                member_pct=("is_member", lambda x: round(x.mean() * 100, 1)),
+            )
+            .reset_index()
+            .sort_values("total_visitors", ascending=False)
+        )
+        return comps
+
+    def get_seasonality_factor(self, month: int) -> float:
+        """
+        Returns a seasonality multiplier for the given month based on
+        historical average attendance relative to annual average.
+        """
+        monthly_avg = (
+            self.transactions.groupby("month")["quantity"]
+            .sum()
+            .reset_index()
+        )
+        overall_avg = monthly_avg["quantity"].mean()
+        month_val = monthly_avg[monthly_avg["month"] == month]["quantity"]
+        if len(month_val) == 0:
+            return 1.0
+        return round(float(month_val.values[0]) / overall_avg, 2)
+
     def get_ytd_kpis(self) -> dict:
         """Top-level KPIs for the current year (2026 YTD)."""
         current_year = 2026
