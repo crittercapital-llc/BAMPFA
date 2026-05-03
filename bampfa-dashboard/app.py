@@ -392,18 +392,25 @@ if st.session_state.home_chat:
         st.rerun()
 
 # ---------------------------------------------------------------------------
-# Quick navigation hints
+# Navigation — clickable page links
 # ---------------------------------------------------------------------------
 
 st.markdown('<div class="section-header">Navigate the Dashboard</div>', unsafe_allow_html=True)
 
-nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns(5)
 
 with nav_col1:
-    st.info("**Attendance**\nDeep-dive into event performance, seasonality, and geography.")
+    st.page_link("pages/1_Attendance.py", label="📊 Attendance", use_container_width=True)
+    st.caption("Seasonality, G1 shows, distance traveled, press spikes, VX staffing")
 with nav_col2:
-    st.info("**Membership**\nTrack cohorts, lapse risk, and conversion opportunities.")
+    st.page_link("pages/2_Membership.py", label="👥 Membership", use_container_width=True)
+    st.caption("Tiers, lapse risk, cohorts, conversion targets")
 with nav_col3:
-    st.info("**Purchase Behavior**\nLead times, channels, ticket types, and revenue patterns.")
+    st.page_link("pages/3_Purchase_Behavior.py", label="🎟️ Purchase Behavior", use_container_width=True)
+    st.caption("Lead times, channels, ticket types, revenue")
 with nav_col4:
-    st.info("**AI Insights**\nAsk Claude anything about the BAMPFA audience data.")
+    st.page_link("pages/4_AI_Insights.py", label="🤖 AI Insights", use_container_width=True)
+    st.caption("Ask Claude anything about BAMPFA audience data")
+with nav_col5:
+    st.page_link("pages/5_Event_Forecast.py", label="🔮 Event Forecaster", use_container_width=True)
+    st.caption("Forecast attendance & staffing for a new film or exhibit")
