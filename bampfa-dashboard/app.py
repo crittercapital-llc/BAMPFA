@@ -164,6 +164,25 @@ from agents.insights_agent import InsightsAgent
 with st.sidebar:
     st.markdown("### BAMPFA Analytics")
     st.markdown("---")
+
+    # Data source legend
+    st.markdown(
+        """
+        <div style="margin-bottom:0.5rem;">
+          <span style="background:#2d7a2d;color:white;padding:2px 7px;border-radius:3px;
+                       font-size:0.7rem;font-weight:600;">✓ REAL</span>
+          &nbsp;Live Tessitura &amp; Survey data
+        </div>
+        <div>
+          <span style="background:#6b4e00;color:#f0c060;padding:2px 7px;border-radius:3px;
+                       font-size:0.7rem;font-weight:600;">⚠ DEMO</span>
+          &nbsp;Simulated data (replace with live feeds)
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("---")
     st.markdown("**Date Range Filter**")
 
     min_date = datetime.date(2022, 1, 1)
@@ -185,9 +204,8 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    st.caption("Data: Jan 2022 – Apr 2026")
-    st.caption("Refresh: Daily batch")
-    # TODO: Add live data source status indicators here
+    st.caption("Real data: Tessitura export · 2025 Survey")
+    st.caption("Demo data: Simulated Jan 2022 – Apr 2026")
 
 # ---------------------------------------------------------------------------
 # Load data
@@ -392,10 +410,40 @@ if st.session_state.home_chat:
         st.rerun()
 
 # ---------------------------------------------------------------------------
-# Navigation — clickable page links
+# Navigation — real data first, then demo analytics
 # ---------------------------------------------------------------------------
 
-st.markdown('<div class="section-header">Navigate the Dashboard</div>', unsafe_allow_html=True)
+st.markdown(
+    """
+    <div style="display:flex;align-items:center;gap:0.5rem;margin:1.5rem 0 0.6rem 0;">
+      <span style="background:#2d7a2d;color:white;padding:2px 8px;border-radius:3px;
+                   font-size:0.72rem;font-weight:700;">✓ REAL DATA</span>
+      <span style="color:#c8a96e;font-size:0.75rem;font-weight:600;
+                   text-transform:uppercase;letter-spacing:0.1em;">Live Tessitura &amp; Survey Exports</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+real_col1, real_col2 = st.columns(2)
+with real_col1:
+    st.page_link("pages/7_Audience_Survey.py", label="📋 2025 Audience Survey", use_container_width=True)
+    st.caption("1,147 real responses — visitation, membership, demographics, access")
+with real_col2:
+    st.page_link("pages/8_Tessitura_Reports.py", label="🎟️ Tessitura Reports", use_container_width=True)
+    st.caption("Live revenue breakdown, ticketholders, and will-call batch report")
+
+st.markdown(
+    """
+    <div style="display:flex;align-items:center;gap:0.5rem;margin:1.5rem 0 0.6rem 0;">
+      <span style="background:#6b4e00;color:#f0c060;padding:2px 8px;border-radius:3px;
+                   font-size:0.72rem;font-weight:700;">⚠ DEMO</span>
+      <span style="color:#c8a96e;font-size:0.75rem;font-weight:600;
+                   text-transform:uppercase;letter-spacing:0.1em;">Simulated Analytics — replace with live data feeds</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5, nav_col6 = st.columns(6)
 

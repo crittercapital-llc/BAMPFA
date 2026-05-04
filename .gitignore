@@ -1,0 +1,25 @@
+# Environment / secrets
+.env
+*.env
+!.env.example
+
+# Real patron data — contains PII (names, emails, addresses)
+bampfa-dashboard/data/real/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Claude Code local config
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
