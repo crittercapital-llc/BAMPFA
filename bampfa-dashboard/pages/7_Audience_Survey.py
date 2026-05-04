@@ -58,7 +58,18 @@ st.markdown(_CSS, unsafe_allow_html=True)
 def get_agent():
     return RealDataAgent()
 
-s = get_agent().survey
+agent = get_agent()
+
+if agent.survey_error:
+    st.error("**Survey data unavailable:** Survey file could not be loaded.")
+    st.info(
+        "The 2025 Audience Survey Excel file is required for this page. "
+        "It should be committed to the repository at "
+        "`bampfa-dashboard/data/real/Haas Agentic Pilot/Surveys/2025 Audience Survey Results.xlsx`."
+    )
+    st.stop()
+
+s = agent.survey
 
 GOLD  = "#c8a96e"
 BLUE  = "#5b8cdb"

@@ -32,10 +32,32 @@ def _single_select(data_rows: pd.DataFrame, col: int) -> dict:
 class RealDataAgent:
     """Loads and exposes real Tessitura/survey data."""
 
+    # Set to a human-readable error string when data files are unavailable
+    load_error: str | None = None
+
     def __init__(self):
-        self.ticketholders = self._load_ticketholders()
-        self.survey = self._load_survey_sheets()
-        self.revenue = self._extract_pdf_data()
+        self.load_error = None
+        self.ticketholders_error: str | None = None
+        self.survey_error: str | None = None
+        self.revenue_error: str | None = None
+
+        try:
+            self.ticketholders = self._load_ticketholders()
+        except FileNotFoundError as e:
+            self.ticketholders = pd.DataFrame()
+            self.ticketholders_error = str(e)
+
+        try:
+            self.survey = self._load_survey_sheets()
+        except FileNotFoundError as e:
+            self.survey = {}
+            self.survey_error = str(e)
+
+        try:
+            self.revenue = self._extract_pdf_data()
+        except FileNotFoundError as e:
+            self.revenue = {}
+            self.revenue_error = str(e)
 
     # ------------------------------------------------------------------
     # Private loaders

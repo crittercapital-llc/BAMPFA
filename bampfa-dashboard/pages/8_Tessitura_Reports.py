@@ -85,18 +85,21 @@ st.markdown("---")
 
 st.markdown('<div class="section-header">Performance Revenue Breakdown</div>', unsafe_allow_html=True)
 
-st.markdown(
-    f"""
-    <div class="highlight-box">
-      <strong style="color:#e8c99a;">{revenue["performance"]}</strong><br/>
-      <span style="color:#a0b4c8;">{revenue["date"]}</span><br/>
-      <span style="color:#7a8fa6;font-size:0.85rem;">{revenue["season"]}</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-ticket_rows = revenue["ticket_rows"]
+if agent.revenue_error:
+    st.warning("Revenue PDF not available on this deployment. Run locally with the full data package to see this section.")
+    ticket_rows = []
+else:
+    st.markdown(
+        f"""
+        <div class="highlight-box">
+          <strong style="color:#e8c99a;">{revenue["performance"]}</strong><br/>
+          <span style="color:#a0b4c8;">{revenue["date"]}</span><br/>
+          <span style="color:#7a8fa6;font-size:0.85rem;">{revenue["season"]}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    ticket_rows = revenue["ticket_rows"]
 if ticket_rows:
     df_rev = pd.DataFrame(ticket_rows)
     total_tickets = df_rev["count"].sum()
@@ -174,90 +177,96 @@ if ticket_rows:
 st.markdown("---")
 st.markdown('<div class="section-header">Shanghai Drama — Ticketholder List</div>', unsafe_allow_html=True)
 
-cities = ticketholders["city"].nunique()
-states = ticketholders["state"].nunique()
-c1, c2, c3 = st.columns(3)
-c1.metric("Total Patrons", len(ticketholders))
-c2.metric("Cities Represented", cities)
-c3.metric("States / Regions", states)
+if agent.ticketholders_error:
+    st.warning(
+        "Patron ticketholder list is not available on this deployment — patron PII files are "
+        "excluded from the repository. Run locally with the full data package to see this section."
+    )
+else:
+    cities = ticketholders["city"].nunique()
+    states = ticketholders["state"].nunique()
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Total Patrons", len(ticketholders))
+    c2.metric("Cities Represented", cities)
+    c3.metric("States / Regions", states)
 
-col_left, col_right = st.columns([1, 1])
+    col_left, col_right = st.columns([1, 1])
 
-with col_left:
-    st.markdown('<div class="section-header">Patrons by City</div>', unsafe_allow_html=True)
-    city_counts = ticketholders["city"].value_counts().reset_index()
-    city_counts.columns = ["City", "Count"]
-    fig_city = px.bar(
-        city_counts,
-        x="Count",
-        y="City",
-        orientation="h",
-        color="Count",
-        color_continuous_scale=[[0, "#1e3a5f"], [1, "#c8a96e"]],
-        text="Count",
-    )
-    fig_city.update_traces(textposition="outside")
-    fig_city.update_layout(
-        plot_bgcolor="#0f0f1a",
-        paper_bgcolor="#0f0f1a",
-        font_color="#e0e0e0",
-        coloraxis_showscale=False,
-        margin=dict(l=10, r=40, t=10, b=10),
-        xaxis=dict(gridcolor="#2d2d4a"),
-        yaxis=dict(gridcolor="#2d2d4a"),
-        height=300,
-    )
-    st.plotly_chart(fig_city, use_container_width=True)
+    with col_left:
+        st.markdown('<div class="section-header">Patrons by City</div>', unsafe_allow_html=True)
+        city_counts = ticketholders["city"].value_counts().reset_index()
+        city_counts.columns = ["City", "Count"]
+        fig_city = px.bar(
+            city_counts,
+            x="Count",
+            y="City",
+            orientation="h",
+            color="Count",
+            color_continuous_scale=[[0, "#1e3a5f"], [1, "#c8a96e"]],
+            text="Count",
+        )
+        fig_city.update_traces(textposition="outside")
+        fig_city.update_layout(
+            plot_bgcolor="#0f0f1a",
+            paper_bgcolor="#0f0f1a",
+            font_color="#e0e0e0",
+            coloraxis_showscale=False,
+            margin=dict(l=10, r=40, t=10, b=10),
+            xaxis=dict(gridcolor="#2d2d4a"),
+            yaxis=dict(gridcolor="#2d2d4a"),
+            height=300,
+        )
+        st.plotly_chart(fig_city, use_container_width=True)
 
-with col_right:
-    st.markdown('<div class="section-header">Patron Locations</div>', unsafe_allow_html=True)
-    map_df = ticketholders.dropna(subset=["zip_code"]).copy()
-    zip_counts = map_df["zip_code"].value_counts().reset_index()
-    zip_counts.columns = ["zip_code", "count"]
-    merged = map_df.merge(zip_counts, on="zip_code", how="left")
-    merged_agg = (
-        merged.groupby("zip_code")
-        .agg(count=("count", "first"), city=("city", "first"))
-        .reset_index()
-    )
-    fig_zip = px.scatter(
-        merged_agg,
-        x="zip_code",
-        y="count",
-        size="count",
-        color="city",
-        text="city",
-        labels={"zip_code": "ZIP Code", "count": "Patrons"},
-        color_discrete_sequence=px.colors.qualitative.Set2,
-    )
-    fig_zip.update_traces(textposition="top center")
-    fig_zip.update_layout(
-        plot_bgcolor="#0f0f1a",
-        paper_bgcolor="#0f0f1a",
-        font_color="#e0e0e0",
-        showlegend=False,
-        margin=dict(l=10, r=10, t=10, b=10),
-        xaxis=dict(gridcolor="#2d2d4a", tickangle=-45),
-        yaxis=dict(gridcolor="#2d2d4a", title="Patrons"),
-        height=300,
-    )
-    st.plotly_chart(fig_zip, use_container_width=True)
+    with col_right:
+        st.markdown('<div class="section-header">Patron Locations</div>', unsafe_allow_html=True)
+        map_df = ticketholders.dropna(subset=["zip_code"]).copy()
+        zip_counts = map_df["zip_code"].value_counts().reset_index()
+        zip_counts.columns = ["zip_code", "count"]
+        merged = map_df.merge(zip_counts, on="zip_code", how="left")
+        merged_agg = (
+            merged.groupby("zip_code")
+            .agg(count=("count", "first"), city=("city", "first"))
+            .reset_index()
+        )
+        fig_zip = px.scatter(
+            merged_agg,
+            x="zip_code",
+            y="count",
+            size="count",
+            color="city",
+            text="city",
+            labels={"zip_code": "ZIP Code", "count": "Patrons"},
+            color_discrete_sequence=px.colors.qualitative.Set2,
+        )
+        fig_zip.update_traces(textposition="top center")
+        fig_zip.update_layout(
+            plot_bgcolor="#0f0f1a",
+            paper_bgcolor="#0f0f1a",
+            font_color="#e0e0e0",
+            showlegend=False,
+            margin=dict(l=10, r=10, t=10, b=10),
+            xaxis=dict(gridcolor="#2d2d4a", tickangle=-45),
+            yaxis=dict(gridcolor="#2d2d4a", title="Patrons"),
+            height=300,
+        )
+        st.plotly_chart(fig_zip, use_container_width=True)
 
-st.markdown('<div class="section-header">Patron Directory</div>', unsafe_allow_html=True)
-st.caption("Email addresses omitted for privacy.")
-display_cols = ["patron_id", "display_name", "city", "state", "zip_code", "event_name"]
-st.dataframe(
-    ticketholders[display_cols].rename(columns={
-        "patron_id": "Patron ID",
-        "display_name": "Name",
-        "city": "City",
-        "state": "State",
-        "zip_code": "ZIP",
-        "event_name": "Event",
-    }),
-    use_container_width=True,
-    hide_index=True,
-)
+    st.markdown('<div class="section-header">Patron Directory</div>', unsafe_allow_html=True)
+    st.caption("Email addresses omitted for privacy.")
+    display_cols = ["patron_id", "display_name", "city", "state", "zip_code", "event_name"]
+    st.dataframe(
+        ticketholders[display_cols].rename(columns={
+            "patron_id": "Patron ID",
+            "display_name": "Name",
+            "city": "City",
+            "state": "State",
+            "zip_code": "ZIP",
+            "event_name": "Event",
+        }),
+        use_container_width=True,
+        hide_index=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Section 3 — Will Call Batch Report
