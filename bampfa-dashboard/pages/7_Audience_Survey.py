@@ -58,7 +58,17 @@ st.markdown(_CSS, unsafe_allow_html=True)
 def get_agent():
     return RealDataAgent()
 
-s = get_agent().survey
+agent = get_agent()
+if agent.load_error:
+    st.error(f"**Data files unavailable:** {agent.load_error}")
+    st.info(
+        "This page requires the Haas Agentic Pilot data files, which are excluded from "
+        "the repository to protect patron privacy. To enable this page, extract the zip "
+        "into `bampfa-dashboard/data/real/` on your deployment server."
+    )
+    st.stop()
+
+s = agent.survey
 
 GOLD  = "#c8a96e"
 BLUE  = "#5b8cdb"

@@ -56,6 +56,15 @@ def get_agent():
     return RealDataAgent()
 
 agent = get_agent()
+if agent.load_error:
+    st.error(f"**Data files unavailable:** {agent.load_error}")
+    st.info(
+        "This page requires the Haas Agentic Pilot data files, which are excluded from "
+        "the repository to protect patron privacy. To enable this page, extract the zip "
+        "into `bampfa-dashboard/data/real/` on your deployment server."
+    )
+    st.stop()
+
 ticketholders = agent.ticketholders
 revenue = agent.revenue
 

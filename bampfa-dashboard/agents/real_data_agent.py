@@ -32,7 +32,20 @@ def _single_select(data_rows: pd.DataFrame, col: int) -> dict:
 class RealDataAgent:
     """Loads and exposes real Tessitura/survey data."""
 
+    # Set to a human-readable error string when data files are unavailable
+    load_error: str | None = None
+
     def __init__(self):
+        if not _REAL_DIR.exists():
+            self.load_error = (
+                "Real data files not found on this deployment. "
+                "Extract the Haas Agentic Pilot zip into "
+                "bampfa-dashboard/data/real/ and redeploy."
+            )
+            self.ticketholders = pd.DataFrame()
+            self.survey = {}
+            self.revenue = {}
+            return
         self.ticketholders = self._load_ticketholders()
         self.survey = self._load_survey_sheets()
         self.revenue = self._extract_pdf_data()
