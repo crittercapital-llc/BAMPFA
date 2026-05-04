@@ -20,11 +20,11 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from scipy import stats  # for Pearson r; scipy is a plotly transitive dep
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from agents.data_agent import DataAgent
+from agents.sentiment_agent import SentimentAgent
 
 # ---------------------------------------------------------------------------
 # Page config
@@ -104,40 +104,42 @@ GREEN   = "#98c379"
 
 # ---------------------------------------------------------------------------
 # Load data (cached)
-# Bug fix: PublicDataAgent is instantiated directly inside each @st.cache_data
-# function instead of being shared via @st.cache_resource. Mixing
-# cache_resource objects with cache_data causes silent serialisation failures
-# on Streamlit Cloud.
+# Each cache_data fetcher instantiates its own SentimentAgent + DataAgent.
+# DataAgent's CSV loaders are themselves @st.cache_data so the cost is just
+# attribute lookup. We avoid passing cache_resource objects into cache_data,
+# which causes silent serialization failures on Streamlit Cloud.
 # ---------------------------------------------------------------------------
 
 @st.cache_resource
 def get_data_agent() -> DataAgent:
     return DataAgent()
 
+def _fresh_sentiment_agent() -> SentimentAgent:
+    return SentimentAgent(DataAgent())
+
 @st.cache_data(ttl=3600, show_spinner="Fetching Reddit mentions…")
 def load_reddit() -> pd.DataFrame:
-    from agents.public_data_agent import PublicDataAgent
-    return PublicDataAgent().get_reddit_mentions()
+    return _fresh_sentiment_agent().get_reddit_mentions()
 
 @st.cache_data(ttl=3600, show_spinner="Fetching Google reviews…")
 def load_reviews() -> pd.DataFrame:
-    from agents.public_data_agent import PublicDataAgent
-    return PublicDataAgent().get_google_reviews()
+    return _fresh_sentiment_agent().get_google_reviews()
 
 @st.cache_data(ttl=3600, show_spinner="Fetching press coverage…")
 def load_press_coverage() -> pd.DataFrame:
-    from agents.public_data_agent import PublicDataAgent
-    return PublicDataAgent().get_all_press_coverage()
+    return _fresh_sentiment_agent().get_press_coverage()
 
 @st.cache_data(ttl=3600)
 def load_press_timeline() -> pd.DataFrame:
-    from agents.public_data_agent import PublicDataAgent
-    return PublicDataAgent().get_press_timeline()
+    return _fresh_sentiment_agent().get_press_timeline()
 
 @st.cache_data(ttl=3600)
 def load_source_status() -> dict:
-    from agents.public_data_agent import PublicDataAgent
-    return PublicDataAgent().get_source_status()
+    return _fresh_sentiment_agent().get_source_status()
+
+@st.cache_data(ttl=3600, show_spinner="Computing press↔attendance correlation…")
+def load_correlation() -> dict:
+    return _fresh_sentiment_agent().press_attendance_correlation()
 
 data_agent = get_data_agent()
 
@@ -293,42 +295,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- Build attendance time series ---
-attendance_monthly = (
-    data_agent.transactions
-    .groupby("year_month")["quantity"]
-    .sum()
-    .reset_index()
-)
-attendance_monthly["year_month_str"] = attendance_monthly["year_month"].astype(str)
-attendance_monthly = attendance_monthly.sort_values("year_month_str")
+corr = load_correlation()
 
-# --- Merge with press timeline ---
-if timeline_df.empty:
+if corr["merged"].empty:
     st.info("Not enough press data for correlation analysis.")
 else:
-    merged = attendance_monthly.merge(timeline_df, on="year_month_str", how="inner")
-
-    # 1-month lagged press count: articles from previous month
-    merged_sorted = merged.sort_values("year_month_str").reset_index(drop=True)
-    merged_sorted["article_count_lag1"] = merged_sorted["article_count"].shift(1)
-
-    merged_valid    = merged_sorted.dropna(subset=["article_count"])
-    merged_lag_valid = merged_sorted.dropna(subset=["article_count_lag1"])
-
-    # Pearson correlations
-    r_same, p_same = (np.nan, np.nan)
-    r_lag,  p_lag  = (np.nan, np.nan)
-    if len(merged_valid) >= 3:
-        r_same, p_same = stats.pearsonr(
-            merged_valid["article_count"],
-            merged_valid["quantity"],
-        )
-    if len(merged_lag_valid) >= 3:
-        r_lag, p_lag = stats.pearsonr(
-            merged_lag_valid["article_count_lag1"],
-            merged_lag_valid["quantity"],
-        )
+    merged_sorted = corr["merged"]
+    r_same = corr["r_same"]
+    r_lag  = corr["r_lag"]
+    n_months = corr["n_months"]
+    merged_valid = merged_sorted.dropna(subset=["article_count"])
 
     # Correlation metrics display
     corr_col1, corr_col2, corr_col3 = st.columns(3)
@@ -345,13 +321,11 @@ else:
             help="Correlation between last month's article count and this month's attendance",
         )
     with corr_col3:
-        n_months = len(merged_valid)
         st.metric("Months of Overlap", f"{n_months}", help="Data points used in correlation")
 
     # --- Dual-axis chart: bars = attendance, lines = press count ---
     fig_dual = go.Figure()
 
-    # Attendance bars
     fig_dual.add_trace(go.Bar(
         x=merged_sorted["year_month_str"],
         y=merged_sorted["quantity"],
@@ -359,7 +333,6 @@ else:
         marker_color="rgba(200,169,110,0.5)",
         yaxis="y1",
     ))
-    # Same-month press line
     fig_dual.add_trace(go.Scatter(
         x=merged_sorted["year_month_str"],
         y=merged_sorted["article_count"],
@@ -369,7 +342,6 @@ else:
         marker=dict(size=5),
         yaxis="y2",
     ))
-    # 1-month lag press line
     fig_dual.add_trace(go.Scatter(
         x=merged_sorted["year_month_str"],
         y=merged_sorted["article_count_lag1"],
@@ -412,7 +384,6 @@ else:
             selector=dict(mode="markers"),
             marker=dict(size=8, opacity=0.75),
         )
-        # Trendline color
         fig_scatter.update_traces(
             selector=dict(mode="lines"),
             line=dict(color=GOLD, width=2, dash="dash"),
@@ -420,21 +391,11 @@ else:
         fig_scatter.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig_scatter, use_container_width=True)
 
-    # Correlation interpretation callout
+    # Correlation interpretation callout (rendered from SentimentAgent)
     if not np.isnan(r_same):
-        strength = "strong" if abs(r_same) > 0.6 else ("moderate" if abs(r_same) > 0.3 else "weak")
-        direction = "positive" if r_same > 0 else "negative"
-        st.markdown(
-            f'<div class="insight-box"><p>'
-            f"The same-month Pearson r = {r_same:.3f} indicates a <strong>{strength} {direction}</strong> "
-            f"correlation between press article counts and attendance. "
-            f"The 1-month lagged r = {r_lag:.3f} tests whether last month's press "
-            f"coverage predicts this month's attendance — potentially more useful for planning. "
-            f"<em>Reminder: this is observational. Confounders include major exhibitions, "
-            f"seasonality, and UC Berkeley academic calendar.</em>"
-            f"</p></div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown('<div class="insight-box">', unsafe_allow_html=True)
+        st.markdown(corr["interpretation_md"])
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # SECTION 4: Reddit & Social Chatter

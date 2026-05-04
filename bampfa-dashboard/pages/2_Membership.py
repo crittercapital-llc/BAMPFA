@@ -12,6 +12,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from agents.conversion_agent import ConversionAgent
 from agents.data_agent import DataAgent
 
 # ---------------------------------------------------------------------------
@@ -60,6 +61,7 @@ def get_agent():
     return DataAgent()
 
 agent = get_agent()
+conversion = ConversionAgent(agent)
 metrics = agent.get_member_metrics()
 
 # ---------------------------------------------------------------------------
@@ -242,15 +244,35 @@ convert_col1, convert_col2 = st.columns([3, 2])
 
 with convert_col1:
     min_visits = st.slider("Minimum visits threshold", min_value=2, max_value=8, value=3)
-    targets = agent.get_repeat_visitors_not_members(min_visits=min_visits)
+    targets = conversion.get_warmest_leads(min_visits=min_visits)
+    summary = conversion.conversion_summary(min_visits=min_visits)
 
-    st.metric("Conversion Targets", f"{len(targets):,} patrons")
+    st.metric("Conversion Targets", f"{summary['n_targets']:,} patrons")
 
     display = targets.head(30).copy()
     display["total_spend"] = display["total_spend"].map("${:,.0f}".format)
     display["last_event"] = display["last_event"].dt.strftime("%b %d, %Y")
-    display.columns = ["Patron ID", "Visits", "Total Spend", "Last Event", "Zip Code"]
+    display = display[["patron_id", "visits", "total_spend", "last_event", "zip_code", "lead_score"]]
+    display.columns = ["Patron ID", "Visits", "Total Spend", "Last Event", "Zip Code", "Lead Score"]
     st.dataframe(display, use_container_width=True, hide_index=True)
+
+    # --- Conversion Agent: draft personalized outreach for the top lead ---
+    if not targets.empty:
+        st.markdown("**Draft outreach for top lead**")
+        top_lead = targets.iloc[0]
+        st.caption(
+            f"Top scoring lead: Patron {top_lead['patron_id']} — "
+            f"{int(top_lead['visits'])} visits, ${top_lead['total_spend']:,.0f} lifetime spend "
+            f"(score {top_lead['lead_score']})"
+        )
+        if st.button("Draft outreach email →", type="primary"):
+            with st.spinner("Conversion Agent drafting…"):
+                email_md = conversion.draft_outreach_email(top_lead)
+            st.markdown(
+                '<div class="highlight-box"><strong>Draft email — ready for marketing review</strong></div>',
+                unsafe_allow_html=True,
+            )
+            st.markdown(email_md)
 
 with convert_col2:
     visits_dist = targets["visits"].value_counts().sort_index().reset_index()
@@ -273,11 +295,10 @@ with convert_col2:
     )
     st.plotly_chart(fig_visits, use_container_width=True)
 
-    avg_spend = targets["total_spend"].mean()
-    st.metric("Avg Spend (Target Patrons)", f"${avg_spend:,.0f}")
+    st.metric("Avg Spend (Target Patrons)", f"${summary['avg_spend']:,.0f}")
     st.caption(
-        f"If even 10% of {len(targets):,} targets convert at Individual tier (~$75/yr), "
-        f"that's **${len(targets) * 0.10 * 75:,.0f}** in new membership revenue."
+        f"If even 10% of {summary['n_targets']:,} targets convert at Individual tier (~$75/yr), "
+        f"that's **${summary['projected_revenue_if_10pct_convert']:,.0f}** in new membership revenue."
     )
 
 # ---------------------------------------------------------------------------

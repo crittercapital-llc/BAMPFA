@@ -16,6 +16,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from agents.data_agent import DataAgent
+from agents.forecasting_agent import ForecastingAgent
 from agents.insights_agent import InsightsAgent
 
 # ---------------------------------------------------------------------------
@@ -188,105 +189,41 @@ if submitted:
 
     month = opening_date.month
     category = "Film" if is_film else "Art"
+    month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    # Pull historical comps
-    comps = agent.get_historical_comps(category, month)
-    seasonality = agent.get_seasonality_factor(month)
-
-    # Build context for Claude
-    month_names = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    season_label = f"{round((seasonality - 1) * 100):+}% vs annual average"
-
+    # Build the spec the ForecastingAgent expects
+    spec = {
+        "category": category,
+        "title": event_title,
+        "opening_date": opening_date,
+        "ticket_price": ticket_price,
+        "marketing_tier": marketing_tier,
+        "run_length_days": run_length_days,
+        "notes": notes,
+    }
     if is_film:
-        event_details = f"""
-Event Type: Film Screening
-Title: {event_title}
-Director: {director}
-Genre: {genre}
-Screening Days: {', '.join(day_of_week) if day_of_week else 'TBD'}
-Time Slot: {time_slot}
-Number of Screenings: {run_length_days}
-Ticket Price: ${ticket_price}
-Marketing Support: {marketing_tier}
-Opening Month: {month_names[month-1]} (Seasonality factor: {season_label})
-Additional Notes: {notes or 'None'}
-"""
+        spec.update({
+            "director": director,
+            "genre": genre,
+            "day_of_week": day_of_week,
+            "time_slot": time_slot,
+        })
     else:
-        event_details = f"""
-Event Type: Art Exhibition
-Title: {event_title}
-Artist / Curator: {artist_name}
-Medium: {medium}
-Gallery: {gallery}
-Run Length: {run_length_days} days
-Ticket Price: ${ticket_price}
-Marketing Support: {marketing_tier}
-Opening Month: {month_names[month-1]} (Seasonality factor: {season_label})
-Additional Notes: {notes or 'None'}
-"""
+        spec.update({
+            "artist_name": artist_name,
+            "medium": medium,
+            "gallery": gallery,
+        })
 
-    # Historical comp summary for Claude
-    top_comps = comps.head(8)
-    comp_text = "\n".join([
-        f"  - {row['event_name']}: {row['total_visitors']:,} visitors, "
-        f"${row['total_revenue']:,.0f} revenue, {row['online_pct']}% online, {row['member_pct']}% members"
-        for _, row in top_comps.iterrows()
-    ])
+    forecaster = ForecastingAgent(agent)
+    with st.spinner("Forecasting Agent analyzing historical comps and generating forecast..."):
+        result = forecaster.forecast_event(spec)
 
-    avg_visitors = int(top_comps["total_visitors"].mean()) if len(top_comps) else 500
-    avg_revenue = float(top_comps["total_revenue"].mean()) if len(top_comps) else 5000.0
-
-    forecast_prompt = f"""
-You are forecasting attendance for a new BAMPFA event. Use your knowledge of the film/art world
-AND the historical BAMPFA data provided to generate a realistic, specific forecast.
-
-## New Event
-{event_details}
-
-## Historical BAMPFA Comps ({category} events in {month_names[month-1]})
-{comp_text}
-
-Historical average for this category/month: {avg_visitors:,} visitors, ${avg_revenue:,.0f} revenue
-
-## Your Task
-Generate a detailed attendance and staffing forecast with these exact sections:
-
-### Attendance Forecast
-Provide three scenarios (Conservative / Base Case / Optimistic) with specific visitor numbers.
-Factor in: director/artist reputation and draw, genre/medium appeal for BAMPFA's audience,
-day-of-week and time slot effects, marketing support level, seasonality, and any co-presenter
-or touring exhibition multipliers mentioned in notes.
-
-For films specifically: assess whether this director has crossover appeal beyond hardcore cinephiles,
-whether the genre aligns with BAMPFA's historically strong film categories, and whether the
-screening format (number of screenings, time slots) maximizes or limits attendance.
-
-For exhibitions specifically: assess artist national vs. local recognition, medium appeal,
-gallery placement (G1 vs. secondary), and run length relative to typical BAMPFA engagement.
-
-### Revenue Estimate
-Based on your attendance forecast, ticket price, and typical member discount rates.
-
-### Week-by-Week Pattern
-Brief description of expected attendance curve (opening weekend, mid-run, closing).
-
-### VX Staffing Recommendation
-Using 1 staff per 80 visitors/day. Specify peak days and minimum staffing floor.
-
-### Key Risk Factors
-2-3 things that could push attendance above or below forecast.
-
-### Comparable Past Events at BAMPFA
-Identify 2-3 of the historical comps above that are most similar and explain why.
-
-Be specific with numbers. Avoid hedging excessively — give a clear base case recommendation.
-"""
-
-    data_summary = agent.get_data_summary_for_ai()
-    insights = InsightsAgent(data_summary)
-
-    with st.spinner("Claude is analyzing historical data and generating your forecast..."):
-        forecast_result = insights.ask(forecast_prompt)
+    comps = result["comps"]
+    seasonality = result["seasonality_factor"]
+    forecast_result = result["narrative_md"]
+    season_label = f"{round((seasonality - 1) * 100):+}% vs annual average"
 
     # ---------------------------------------------------------------------------
     # Output
@@ -294,17 +231,13 @@ Be specific with numbers. Avoid hedging excessively — give a clear base case r
 
     st.markdown('<div class="section-header">Forecast Results</div>', unsafe_allow_html=True)
 
-    # Quick metric row based on avg comps
     m1, m2, m3, m4 = st.columns(4)
-    adj_avg = int(avg_visitors * seasonality)
     with m1:
-        st.metric("Comp Average (this month)", f"{adj_avg:,}", f"Seasonality: {season_label}")
+        st.metric("Comp Average (this month)", f"{result['base_visitors']:,}", f"Seasonality: {season_label}")
     with m2:
-        est_revenue = round(adj_avg * ticket_price * 0.85, 0)
-        st.metric("Est. Revenue (Base)", f"${est_revenue:,.0f}", "At comp avg attendance")
+        st.metric("Est. Revenue (Base)", f"${result['base_revenue']:,.0f}", "At comp avg attendance")
     with m3:
-        daily_staff = max(2, round(adj_avg / 22 / 80))
-        st.metric("Est. Daily VX Staff", str(daily_staff), "Base case")
+        st.metric("Est. Daily VX Staff", str(result["base_staff"]), "Base case")
     with m4:
         st.metric("Seasonality Index", str(seasonality), f"{month_names[month-1]} vs annual avg")
 
@@ -363,6 +296,7 @@ Be specific with numbers. Avoid hedging excessively — give a clear base case r
         context = f"We just generated a forecast for: {event_title} ({category}). " \
                   f"The forecast was:\n\n{forecast_result}\n\nFollow-up question: {followup.strip()}"
         st.session_state.forecast_chat.append({"role": "user", "content": followup.strip()})
+        insights = InsightsAgent(agent)
         with st.spinner("Thinking..."):
             reply = insights.ask(context)
         st.session_state.forecast_chat.append({"role": "assistant", "content": reply})

@@ -56,14 +56,10 @@ st.markdown(
 def get_agent():
     return DataAgent()
 
-@st.cache_data(show_spinner=False)
-def get_data_summary(dummy: str) -> str:
-    # dummy arg forces re-evaluation when agent changes; use fixed string in prod
-    return get_agent().get_data_summary_for_ai()
-
 agent = get_agent()
-data_summary = get_data_summary("v1")
-insights_agent = InsightsAgent(data_summary)
+insights_agent = InsightsAgent(agent)
+# Built once per render for the sidebar "view data context" expander.
+data_summary = agent.get_data_summary_for_ai()
 
 # ---------------------------------------------------------------------------
 # Session state for conversation history

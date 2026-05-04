@@ -154,6 +154,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
+from agents.briefing_agent import BriefingAgent
 from agents.data_agent import DataAgent
 from agents.insights_agent import InsightsAgent
 
@@ -337,12 +338,12 @@ with chart_col2:
 st.markdown('<div class="section-header">Today\'s AI Briefing</div>', unsafe_allow_html=True)
 
 @st.cache_data(ttl=3600, show_spinner="Generating AI briefing...")
-def get_briefing(data_summary: str) -> str:
-    insights = InsightsAgent(data_summary)
-    return insights.generate_dashboard_summary()
+def get_briefing(_agent) -> str:
+    # Underscore-prefixed args are excluded from Streamlit's hashing — DataAgent
+    # is a cache_resource singleton, so a single cache slot per session is correct.
+    return BriefingAgent(_agent).generate_daily_briefing()
 
-data_summary = agent.get_data_summary_for_ai()
-briefing = get_briefing(data_summary)
+briefing = get_briefing(agent)
 
 # Render briefing in a styled container — use st.markdown so markdown renders properly
 st.markdown('<div class="ai-briefing">', unsafe_allow_html=True)
@@ -395,7 +396,7 @@ with st.form(key="home_chat_form", clear_on_submit=True):
 
 if submitted and home_input.strip():
     st.session_state.home_chat.append({"role": "user", "content": home_input.strip()})
-    insights_agent = InsightsAgent(data_summary)
+    insights_agent = InsightsAgent(agent)
     with st.spinner("Claude is thinking..."):
         response = insights_agent.ask_with_history(
             home_input.strip(),
