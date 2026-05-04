@@ -59,12 +59,13 @@ def get_agent():
     return RealDataAgent()
 
 agent = get_agent()
-if agent.load_error:
-    st.error(f"**Data files unavailable:** {agent.load_error}")
+
+if agent.survey_error:
+    st.error("**Survey data unavailable:** Survey file could not be loaded.")
     st.info(
-        "This page requires the Haas Agentic Pilot data files, which are excluded from "
-        "the repository to protect patron privacy. To enable this page, extract the zip "
-        "into `bampfa-dashboard/data/real/` on your deployment server."
+        "The 2025 Audience Survey Excel file is required for this page. "
+        "It should be committed to the repository at "
+        "`bampfa-dashboard/data/real/Haas Agentic Pilot/Surveys/2025 Audience Survey Results.xlsx`."
     )
     st.stop()
 

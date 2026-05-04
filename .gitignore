@@ -3,8 +3,12 @@
 *.env
 !.env.example
 
-# Real patron data — contains PII (names, emails, addresses)
-bampfa-dashboard/data/real/
+# Patron PII — names, home addresses, emails; never commit
+bampfa-dashboard/data/real/**/List Shanghai Drama Ticketholders.csv
+bampfa-dashboard/data/real/**/*Will Call*.png
+
+# Survey/revenue files are scrubbed and committed; original zip stays local
+*.zip
 
 # Python
 __pycache__/

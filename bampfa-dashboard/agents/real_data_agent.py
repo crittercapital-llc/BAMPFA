@@ -36,19 +36,28 @@ class RealDataAgent:
     load_error: str | None = None
 
     def __init__(self):
-        if not _REAL_DIR.exists():
-            self.load_error = (
-                "Real data files not found on this deployment. "
-                "Extract the Haas Agentic Pilot zip into "
-                "bampfa-dashboard/data/real/ and redeploy."
-            )
+        self.load_error = None
+        self.ticketholders_error: str | None = None
+        self.survey_error: str | None = None
+        self.revenue_error: str | None = None
+
+        try:
+            self.ticketholders = self._load_ticketholders()
+        except FileNotFoundError as e:
             self.ticketholders = pd.DataFrame()
+            self.ticketholders_error = str(e)
+
+        try:
+            self.survey = self._load_survey_sheets()
+        except FileNotFoundError as e:
             self.survey = {}
+            self.survey_error = str(e)
+
+        try:
+            self.revenue = self._extract_pdf_data()
+        except FileNotFoundError as e:
             self.revenue = {}
-            return
-        self.ticketholders = self._load_ticketholders()
-        self.survey = self._load_survey_sheets()
-        self.revenue = self._extract_pdf_data()
+            self.revenue_error = str(e)
 
     # ------------------------------------------------------------------
     # Private loaders
