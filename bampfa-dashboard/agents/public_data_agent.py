@@ -31,6 +31,7 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Sentiment helper — plain-text, no external NLP library required
@@ -554,27 +555,43 @@ class PublicDataAgent:
 
     def get_google_reviews(self) -> pd.DataFrame:
         """
-        Fetches BAMPFA Google reviews via SerpAPI (google_maps_reviews engine).
-        Uses BAMPFA's known ludocid so no place search step is needed.
-        SerpAPI free tier: 100 searches/month — sufficient for monthly refresh.
-        Paginates up to 5 pages (~50 reviews) to maximise coverage.
+        Returns BAMPFA Google reviews. Priority order:
+          1. data/google_reviews_live.csv  — full historical pull (all 900+ reviews)
+             Run data/fetch_all_reviews.py once to generate this file.
+          2. SerpAPI live fetch            — up to ~50 reviews (5 pages, API key required)
+          3. Synthetic dummy data          — fallback when no key and no CSV
 
-        Returns DataFrame: date, rating, text, author, source.
-        Falls back to synthetic data if SERPAPI_KEY is missing or on error.
+        For the full 900+ review dataset, run locally:
+            python data/fetch_all_reviews.py          # first-time full pull (~91 API calls)
+            python data/fetch_all_reviews.py --incremental  # monthly top-up (~2-5 calls)
         """
+        # ── Priority 1: pre-fetched CSV ────────────────────────────────────────
+        csv_path = Path(__file__).parent.parent / "data" / "google_reviews_live.csv"
+        if csv_path.exists():
+            try:
+                df = pd.read_csv(csv_path, parse_dates=["date"])
+                df["date"] = pd.to_datetime(df["date"], errors="coerce")
+                df = df.dropna(subset=["date"])
+                print(f"[PublicDataAgent] Google Reviews: loaded {len(df):,} reviews from CSV")
+                return df.sort_values("date", ascending=False).reset_index(drop=True)
+            except Exception as e:
+                warnings.warn(f"[PublicDataAgent] CSV load error: {e} — falling back to API")
+
+        # ── Priority 2: SerpAPI live fetch (capped at 5 pages / ~50 reviews) ──
         if not self._serpapi_key:
-            print("[PublicDataAgent] SerpAPI: no key — returning dummy reviews")
+            print("[PublicDataAgent] SerpAPI: no key and no CSV — returning dummy reviews")
             return _generate_dummy_reviews()
 
         try:
             import requests
 
-            print("[PublicDataAgent] SerpAPI: fetching BAMPFA Google reviews …")
+            print("[PublicDataAgent] SerpAPI: fetching BAMPFA Google reviews (live, up to 5 pages)…")
+            print("[PublicDataAgent] Tip: run data/fetch_all_reviews.py for all 900+ reviews")
 
             rows = []
             next_page_token = None
             pages_fetched = 0
-            max_pages = 5  # cap at 5 API calls on free tier
+            max_pages = 5  # conserve free-tier quota; full pull via fetch_all_reviews.py
 
             while pages_fetched < max_pages:
                 params = {
@@ -621,7 +638,7 @@ class PublicDataAgent:
                 pages_fetched += 1
                 next_page_token = data.get("serpapi_pagination", {}).get("next_page_token")
                 if not next_page_token:
-                    break  # no more pages
+                    break
 
             if not rows:
                 print("[PublicDataAgent] SerpAPI: no reviews returned — falling back to dummy data")
@@ -630,7 +647,7 @@ class PublicDataAgent:
             df = pd.DataFrame(rows)
             df["date"] = pd.to_datetime(df["date"], errors="coerce")
             df = df.dropna(subset=["date"])
-            print(f"[PublicDataAgent] SerpAPI: fetched {len(df)} Google reviews (live)")
+            print(f"[PublicDataAgent] SerpAPI: fetched {len(df)} reviews (live, 5-page cap)")
             return df.sort_values("date", ascending=False).reset_index(drop=True)
 
         except Exception as e:
