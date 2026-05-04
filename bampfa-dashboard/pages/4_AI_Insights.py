@@ -94,7 +94,7 @@ if not insights_agent.has_api_key:
         icon="⚠️",
     )
 else:
-    st.success("Connected to Claude claude-sonnet-4-5", icon="✓")
+    st.success("Connected to Claude claude-sonnet-4-5", icon="✅")
 
 # ---------------------------------------------------------------------------
 # Sidebar: data context preview
