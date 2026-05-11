@@ -559,6 +559,274 @@ class DataAgent:
             ) if len(reviews_year) else 0.0,
         }
 
+    # ------------------------------------------------------------------
+    # Almanac methods
+    # ------------------------------------------------------------------
+
+    def get_almanac_events(self) -> pd.DataFrame:
+        """Exhibitions and film programs derived from transaction data."""
+        df = self.transactions.copy()
+        events = (
+            df.groupby(["event_name", "event_category"])
+            .agg(
+                first_date=("event_date", "min"),
+                last_date=("event_date", "max"),
+                total_visitors=("quantity", "sum"),
+                total_revenue=("revenue", "sum"),
+                avg_ticket=("ticket_price", "mean"),
+            )
+            .reset_index()
+        )
+        events["duration_days"] = (events["last_date"] - events["first_date"]).dt.days + 1
+        return events.sort_values("first_date")
+
+    @staticmethod
+    def get_bay_area_school_terms() -> list:
+        """Bay Area (BUSD/OUSD) school terms and breaks, 2022–2026."""
+        return [
+            {"name": "Summer Break", "type": "school_break", "start": "2022-06-09", "end": "2022-08-21"},
+            {"name": "Fall Term", "type": "school_term", "start": "2022-08-22", "end": "2022-12-16"},
+            {"name": "Winter Break", "type": "school_break", "start": "2022-12-17", "end": "2023-01-06"},
+            {"name": "Spring Term", "type": "school_term", "start": "2023-01-09", "end": "2023-06-08"},
+            {"name": "Spring Break", "type": "school_break", "start": "2023-04-10", "end": "2023-04-14"},
+            {"name": "Summer Break", "type": "school_break", "start": "2023-06-09", "end": "2023-08-20"},
+            {"name": "Fall Term", "type": "school_term", "start": "2023-08-21", "end": "2023-12-15"},
+            {"name": "Winter Break", "type": "school_break", "start": "2023-12-16", "end": "2024-01-05"},
+            {"name": "Spring Term", "type": "school_term", "start": "2024-01-08", "end": "2024-06-06"},
+            {"name": "Spring Break", "type": "school_break", "start": "2024-04-08", "end": "2024-04-12"},
+            {"name": "Summer Break", "type": "school_break", "start": "2024-06-07", "end": "2024-08-18"},
+            {"name": "Fall Term", "type": "school_term", "start": "2024-08-19", "end": "2024-12-20"},
+            {"name": "Winter Break", "type": "school_break", "start": "2024-12-21", "end": "2025-01-10"},
+            {"name": "Spring Term", "type": "school_term", "start": "2025-01-13", "end": "2025-06-05"},
+            {"name": "Spring Break", "type": "school_break", "start": "2025-04-14", "end": "2025-04-18"},
+            {"name": "Summer Break", "type": "school_break", "start": "2025-06-06", "end": "2025-08-17"},
+            {"name": "Fall Term", "type": "school_term", "start": "2025-08-18", "end": "2025-12-19"},
+            {"name": "Winter Break", "type": "school_break", "start": "2025-12-20", "end": "2026-01-09"},
+            {"name": "Spring Term", "type": "school_term", "start": "2026-01-12", "end": "2026-06-04"},
+            {"name": "Spring Break", "type": "school_break", "start": "2026-04-13", "end": "2026-04-17"},
+            {"name": "Summer Break", "type": "school_break", "start": "2026-06-05", "end": "2026-08-16"},
+        ]
+
+    @staticmethod
+    def get_public_holidays() -> list:
+        """US federal holidays and Bay Area-relevant events, 2022–2026."""
+        entries = []
+        # Fixed-date holidays
+        fixed = [
+            ("New Year's Day", "01-01"),
+            ("Independence Day", "07-04"),
+            ("Veterans Day", "11-11"),
+            ("Christmas Day", "12-25"),
+        ]
+        for year in range(2022, 2027):
+            for name, md in fixed:
+                entries.append({"name": name, "date": f"{year}-{md}", "type": "federal_holiday"})
+        # Approximate floating holidays (simplified)
+        floating = [
+            ("MLK Day", "2022-01-17"), ("Presidents Day", "2022-02-21"),
+            ("Memorial Day", "2022-05-30"), ("Labor Day", "2022-09-05"),
+            ("Columbus Day", "2022-10-10"), ("Thanksgiving", "2022-11-24"),
+            ("MLK Day", "2023-01-16"), ("Presidents Day", "2023-02-20"),
+            ("Memorial Day", "2023-05-29"), ("Labor Day", "2023-09-04"),
+            ("Columbus Day", "2023-10-09"), ("Thanksgiving", "2023-11-23"),
+            ("MLK Day", "2024-01-15"), ("Presidents Day", "2024-02-19"),
+            ("Memorial Day", "2024-05-27"), ("Labor Day", "2024-09-02"),
+            ("Columbus Day", "2024-10-14"), ("Thanksgiving", "2024-11-28"),
+            ("MLK Day", "2025-01-20"), ("Presidents Day", "2025-02-17"),
+            ("Memorial Day", "2025-05-26"), ("Labor Day", "2025-09-01"),
+            ("Columbus Day", "2025-10-13"), ("Thanksgiving", "2025-11-27"),
+            ("MLK Day", "2026-01-19"), ("Presidents Day", "2026-02-16"),
+            ("Memorial Day", "2026-05-25"), ("Labor Day", "2026-09-07"),
+        ]
+        for name, date in floating:
+            entries.append({"name": name, "date": date, "type": "federal_holiday"})
+        return entries
+
+    def get_holiday_attendance_impact(self) -> pd.DataFrame:
+        """
+        Tags each monthly attendance period as school_break, school_term, or normal
+        and computes average attendance per context type.
+        """
+        monthly = (
+            self.transactions.groupby("year_month")["quantity"]
+            .sum()
+            .reset_index()
+        )
+        monthly["year_month_str"] = monthly["year_month"].astype(str)
+        monthly["period_start"] = monthly["year_month"].apply(
+            lambda p: p.to_timestamp(how="start")
+        )
+
+        terms = self.get_bay_area_school_terms()
+
+        def classify_month(dt):
+            for t in terms:
+                s = pd.Timestamp(t["start"])
+                e = pd.Timestamp(t["end"])
+                if s <= dt <= e:
+                    return t["type"]
+            return "school_term"
+
+        monthly["context"] = monthly["period_start"].apply(classify_month)
+        return monthly.sort_values("year_month_str")
+
+    # ------------------------------------------------------------------
+    # Visitor Flow / Guest Flow methods
+    # ------------------------------------------------------------------
+
+    def get_gallery_flow_data(self) -> pd.DataFrame:
+        """
+        Simulates gallery-level visitor flow based on transaction data.
+        BAMPFA spaces: G1 (main), G2, G3, G4, Cinema, Film Study Center.
+        Proportions are calibrated to typical art-museum traffic splits.
+        ⚠ Replace with sensor/WiFi dwell-time data when available.
+        """
+        import numpy as np
+
+        rng = np.random.default_rng(42)
+        monthly = (
+            self.transactions.groupby("year_month")
+            .agg(total_visitors=("quantity", "sum"))
+            .reset_index()
+        )
+        monthly["year_month_str"] = monthly["year_month"].astype(str)
+
+        gallery_weights = {
+            "G1 (Main Gallery)": 0.35,
+            "G2 (Modern/Contemporary)": 0.18,
+            "G3 (Works on Paper)": 0.12,
+            "G4 (Rotating)": 0.10,
+            "Cinema": 0.16,
+            "Film Study Center": 0.09,
+        }
+        avg_dwell = {
+            "G1 (Main Gallery)": 28,
+            "G2 (Modern/Contemporary)": 18,
+            "G3 (Works on Paper)": 14,
+            "G4 (Rotating)": 12,
+            "Cinema": 95,
+            "Film Study Center": 22,
+        }
+
+        rows = []
+        for _, row in monthly.iterrows():
+            total = row["total_visitors"]
+            for gallery, weight in gallery_weights.items():
+                visitors = int(total * weight * rng.uniform(0.92, 1.08))
+                dwell = avg_dwell[gallery] + rng.normal(0, 3)
+                rows.append({
+                    "year_month_str": row["year_month_str"],
+                    "year_month": row["year_month"],
+                    "gallery": gallery,
+                    "visitors": max(0, visitors),
+                    "avg_dwell_minutes": max(1, round(float(dwell), 1)),
+                })
+        return pd.DataFrame(rows).sort_values(["year_month_str", "gallery"])
+
+    def get_hourly_flow(self) -> pd.DataFrame:
+        """
+        Simulated average hourly visitor counts by day-of-week for the last 12 months.
+        BAMPFA hours: Wed–Sun 11am–7pm.
+        ⚠ Replace with actual door-counter or timed-ticket data when available.
+        """
+        import numpy as np
+
+        rng = np.random.default_rng(7)
+        hours = list(range(11, 20))
+        days = ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        peak_hour = {h: max(0, 1 - abs(h - 14) * 0.18) for h in hours}
+        day_multiplier = {
+            "Wednesday": 0.65, "Thursday": 0.70, "Friday": 0.85,
+            "Saturday": 1.40, "Sunday": 1.20,
+        }
+        rows = []
+        base = 45
+        for day in days:
+            for h in hours:
+                avg = base * day_multiplier[day] * peak_hour[h]
+                rows.append({
+                    "day": day,
+                    "hour": h,
+                    "hour_label": f"{h}:00",
+                    "avg_visitors": max(0, int(avg + rng.normal(0, 3))),
+                })
+        return pd.DataFrame(rows)
+
+    def get_dwell_time_summary(self) -> pd.DataFrame:
+        """Returns dwell time stats per gallery aggregated over all months."""
+        flow = self.get_gallery_flow_data()
+        summary = (
+            flow.groupby("gallery")
+            .agg(
+                avg_dwell=("avg_dwell_minutes", "mean"),
+                total_visitors=("visitors", "sum"),
+            )
+            .reset_index()
+        )
+        summary["avg_dwell"] = summary["avg_dwell"].round(1)
+        return summary.sort_values("total_visitors", ascending=False)
+
+    # ------------------------------------------------------------------
+    # Spend Analysis methods
+    # ------------------------------------------------------------------
+
+    def get_spend_breakdown(self) -> pd.DataFrame:
+        """
+        Monthly revenue breakdown across tickets, F&B (café), and retail (gift shop).
+        F&B and retail are simulated at typical cultural-institution per-capita rates.
+        F&B: ~$4.50/visitor  |  Retail: ~$7.20/visitor
+        ⚠ Replace with actual POS export from café and gift shop when available.
+        """
+        import numpy as np
+
+        rng = np.random.default_rng(99)
+        monthly = (
+            self.transactions.groupby("year_month")
+            .agg(
+                ticket_revenue=("revenue", "sum"),
+                visitors=("quantity", "sum"),
+            )
+            .reset_index()
+        )
+        monthly["year_month_str"] = monthly["year_month"].astype(str)
+
+        monthly["fb_revenue"] = (
+            monthly["visitors"] * rng.uniform(3.8, 5.2, len(monthly))
+        ).round(2)
+        monthly["retail_revenue"] = (
+            monthly["visitors"] * rng.uniform(5.5, 9.0, len(monthly))
+        ).round(2)
+        monthly["total_revenue"] = (
+            monthly["ticket_revenue"] + monthly["fb_revenue"] + monthly["retail_revenue"]
+        ).round(2)
+        monthly["per_capita_total"] = (
+            monthly["total_revenue"] / monthly["visitors"].replace(0, np.nan)
+        ).round(2)
+        return monthly.sort_values("year_month_str")
+
+    def get_per_capita_spend_by_segment(self) -> pd.DataFrame:
+        """Per-capita ticket spend broken down by member status and channel."""
+        df = self.transactions.copy()
+        df["segment"] = df.apply(
+            lambda r: ("Member" if r["is_member"] else "Non-Member")
+            + " / " + r["channel"],
+            axis=1,
+        )
+        summary = (
+            df.groupby("segment")
+            .agg(
+                avg_ticket_price=("ticket_price", "mean"),
+                avg_quantity=("quantity", "mean"),
+                total_revenue=("revenue", "sum"),
+                transactions=("transaction_id", "count"),
+            )
+            .reset_index()
+        )
+        summary["avg_revenue_per_transaction"] = (
+            summary["total_revenue"] / summary["transactions"]
+        ).round(2)
+        return summary.sort_values("avg_ticket_price", ascending=False)
+
     def get_data_summary_for_ai(self) -> str:
         """
         Returns a compact text summary of key metrics for the InsightsAgent context window.
