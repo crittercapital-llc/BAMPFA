@@ -458,11 +458,35 @@ with nav_col3:
     st.page_link("pages/3_Purchase_Behavior.py", label="🎟️ Purchase Behavior", use_container_width=True)
     st.caption("Lead times, channels, ticket types, revenue")
 with nav_col4:
-    st.page_link("pages/4_AI_Insights.py", label="🤖 AI Insights", use_container_width=True)
-    st.caption("Ask Claude anything about BAMPFA audience data")
+    st.page_link("pages/4_AI_Insights.py", label="💬 Ask", use_container_width=True)
+    st.caption("Dexibit-style conversational AI connected to all your data")
 with nav_col5:
     st.page_link("pages/5_Event_Forecast.py", label="🔮 Event Forecaster", use_container_width=True)
     st.caption("Forecast attendance & staffing for a new film or exhibit")
 with nav_col6:
     st.page_link("pages/6_Public_Sentiment.py", label="🌐 Public Sentiment", use_container_width=True)
     st.caption("Press coverage, Reddit chatter, Google reviews")
+
+st.markdown(
+    """
+    <div style="display:flex;align-items:center;gap:0.5rem;margin:1.5rem 0 0.6rem 0;">
+      <span style="background:#6b4e00;color:#f0c060;padding:2px 8px;border-radius:3px;
+                   font-size:0.72rem;font-weight:700;">⚠ DEMO</span>
+      <span style="color:#c8a96e;font-size:0.75rem;font-weight:600;
+                   text-transform:uppercase;letter-spacing:0.1em;">Dexibit-Inspired Features</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+dex_col1, dex_col2, dex_col3 = st.columns(3)
+
+with dex_col1:
+    st.page_link("pages/9_Almanac.py", label="📅 Almanac", use_container_width=True)
+    st.caption("Unified planning calendar: exhibitions, school terms, holidays, attendance context")
+with dex_col2:
+    st.page_link("pages/10_Visitor_Flow.py", label="🔀 Cross-Visitation", use_container_width=True)
+    st.caption("Films ↔ exhibitions patron overlap, venue traffic, day-of-week patterns")
+with dex_col3:
+    st.page_link("pages/11_Spend_Analysis.py", label="💰 Spend Analysis", use_container_width=True)
+    st.caption("Per-capita spend, F&B, retail revenue, member vs. non-member comparison")
