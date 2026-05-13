@@ -485,8 +485,8 @@ with dex_col1:
     st.page_link("pages/9_Almanac.py", label="📅 Almanac", use_container_width=True)
     st.caption("Unified planning calendar: exhibitions, school terms, holidays, attendance context")
 with dex_col2:
-    st.page_link("pages/10_Visitor_Flow.py", label="🗺️ Visitor Flow", use_container_width=True)
-    st.caption("Gallery heatmaps, dwell time analysis, hourly flow patterns")
+    st.page_link("pages/10_Visitor_Flow.py", label="🔀 Cross-Visitation", use_container_width=True)
+    st.caption("Films ↔ exhibitions patron overlap, venue traffic, day-of-week patterns")
 with dex_col3:
     st.page_link("pages/11_Spend_Analysis.py", label="💰 Spend Analysis", use_container_width=True)
     st.caption("Per-capita spend, F&B, retail revenue, member vs. non-member comparison")

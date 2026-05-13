@@ -107,116 +107,72 @@ st.markdown(
 # Load calendar data
 # ---------------------------------------------------------------------------
 
-events_df = agent.get_almanac_events()
 terms = agent.get_bay_area_school_terms()
 holidays = agent.get_public_holidays()
 impact_df = agent.get_holiday_attendance_impact()
+footprint_df = agent.get_program_monthly_footprint()
 
-# Filter to selected year
-year_events = events_df[
-    (events_df["first_date"].dt.year <= selected_year)
-    & (events_df["last_date"].dt.year >= selected_year)
+# ---------------------------------------------------------------------------
+# Section 1: Program Activity Heatmap (month × program, based on ticket sales)
+# ---------------------------------------------------------------------------
+
+st.markdown(
+    '<div class="section-header">Program Activity by Month — Ticket Sales Footprint</div>',
+    unsafe_allow_html=True,
+)
+st.caption(
+    "Which programs had ticket sales in each month? This is what the transaction "
+    "data can reliably tell us. Darker = more visitors that month."
+)
+
+cat_filter = []
+if show_exhibitions:
+    cat_filter.append("Art")
+if show_films:
+    cat_filter.append("Film")
+
+year_footprint = footprint_df[
+    footprint_df["year_month_str"].str.startswith(str(selected_year))
+    & footprint_df["event_category"].isin(cat_filter if cat_filter else ["Art", "Film"])
 ].copy()
 
-# ---------------------------------------------------------------------------
-# Section 1: Exhibition Timeline (Gantt-style)
-# ---------------------------------------------------------------------------
+if not year_footprint.empty:
+    pivot = year_footprint.pivot_table(
+        index="event_name",
+        columns="year_month_str",
+        values="quantity",
+        aggfunc="sum",
+    ).fillna(0)
 
-st.markdown('<div class="section-header">Exhibition &amp; Film Program Timeline</div>', unsafe_allow_html=True)
+    # Sort programs by total visitors so the busiest are at the top
+    pivot = pivot.loc[pivot.sum(axis=1).sort_values(ascending=False).index]
+    # Truncate long names for display
+    pivot.index = [n[:38] + "…" if len(n) > 38 else n for n in pivot.index]
 
-gantt_rows = []
-
-if show_exhibitions:
-    art_events = year_events[year_events["event_category"] == "Art"]
-    for _, row in art_events.iterrows():
-        start = max(row["first_date"], pd.Timestamp(f"{selected_year}-01-01"))
-        end = min(row["last_date"], pd.Timestamp(f"{selected_year}-12-31"))
-        if start <= end:
-            gantt_rows.append({
-                "Program": row["event_name"][:40],
-                "Start": start,
-                "End": end + pd.Timedelta(days=1),
-                "Type": "Art Exhibition",
-                "Visitors": row["total_visitors"],
-            })
-
-if show_films:
-    film_events = year_events[year_events["event_category"] == "Film"]
-    for _, row in film_events.iterrows():
-        start = max(row["first_date"], pd.Timestamp(f"{selected_year}-01-01"))
-        end = min(row["last_date"], pd.Timestamp(f"{selected_year}-12-31"))
-        if start <= end:
-            gantt_rows.append({
-                "Program": row["event_name"][:40],
-                "Start": start,
-                "End": end + pd.Timedelta(days=1),
-                "Type": "Film Program",
-                "Visitors": row["total_visitors"],
-            })
-
-if gantt_rows:
-    gantt_df = pd.DataFrame(gantt_rows).sort_values("Start")
-    fig_gantt = px.timeline(
-        gantt_df,
-        x_start="Start",
-        x_end="End",
-        y="Program",
-        color="Type",
-        hover_data=["Visitors"],
-        color_discrete_map={
-            "Art Exhibition": "#c8a96e",
-            "Film Program": "#5b8cdb",
-        },
+    fig_foot = px.imshow(
+        pivot,
+        color_continuous_scale="YlOrBr",
+        labels=dict(x="Month", y="Program", color="Visitors"),
+        title=f"Program Ticket Sales by Month ({selected_year})",
         template="plotly_dark",
-        title=f"Programs Active in {selected_year}",
+        aspect="auto",
     )
-
-    # Overlay school breaks as vertical bands
-    if show_school:
-        for t in terms:
-            s = pd.Timestamp(t["start"])
-            e = pd.Timestamp(t["end"])
-            if t["type"] == "school_break" and s.year <= selected_year and e.year >= selected_year:
-                fig_gantt.add_vrect(
-                    x0=s, x1=e,
-                    fillcolor="rgba(143,211,110,0.07)",
-                    line_color="rgba(143,211,110,0.25)",
-                    line_width=1,
-                    annotation_text="🏖 Break",
-                    annotation_position="top left",
-                    annotation_font_size=9,
-                    annotation_font_color="#8fd36e",
-                )
-
-    # Overlay federal holidays as vertical lines
-    if show_holidays:
-        for h in holidays:
-            hd = pd.Timestamp(h["date"])
-            if hd.year == selected_year:
-                fig_gantt.add_vline(
-                    x=hd.timestamp() * 1000,
-                    line_color="rgba(224,168,110,0.4)",
-                    line_dash="dot",
-                    line_width=1,
-                )
-
-    fig_gantt.update_yaxes(autorange="reversed")
-    fig_gantt.update_layout(
+    fig_foot.update_layout(
         paper_bgcolor="#1e1e30",
         plot_bgcolor="#141424",
-        height=max(350, len(gantt_rows) * 28 + 80),
+        height=max(360, len(pivot) * 22 + 80),
         margin=dict(l=0, r=0, t=40, b=0),
-        xaxis_title="",
-        yaxis_title="",
-        legend_title_text="",
+        xaxis=dict(tickangle=30, tickfont=dict(size=9)),
+        yaxis=dict(tickfont=dict(size=9)),
+        coloraxis_colorbar=dict(title="Visitors"),
     )
-    st.plotly_chart(fig_gantt, use_container_width=True)
+    st.plotly_chart(fig_foot, use_container_width=True)
     st.caption(
-        "Green shading = school breaks (higher local family attendance expected). "
-        "Dotted gold lines = public holidays."
+        "Each cell = visitor count from ticket sales in that month. "
+        "Empty = no ticket records for that program that month."
     )
 else:
-    st.info("Select at least one program type in the sidebar to view the timeline.")
+    st.info("Select at least one program type in the sidebar.")
 
 # ---------------------------------------------------------------------------
 # Section 2: Monthly Attendance with Context Overlay
@@ -367,16 +323,24 @@ with tab2:
         st.dataframe(hol_df, use_container_width=True, hide_index=True)
 
 with tab3:
-    if not year_events.empty:
-        display = year_events[["event_name", "event_category", "first_date", "last_date",
-                                "duration_days", "total_visitors"]].copy()
-        display["first_date"] = display["first_date"].dt.strftime("%b %d, %Y")
-        display["last_date"] = display["last_date"].dt.strftime("%b %d, %Y")
-        display.columns = ["Program", "Category", "First Date", "Last Date",
-                            "Duration (days)", "Total Visitors"]
-        st.dataframe(display, use_container_width=True, hide_index=True)
+    if not year_footprint.empty:
+        prog_summary = (
+            year_footprint.groupby(["event_name", "event_category"])
+            .agg(
+                active_months=("year_month_str", "nunique"),
+                total_visitors=("quantity", "sum"),
+            )
+            .reset_index()
+            .sort_values("total_visitors", ascending=False)
+        )
+        prog_summary.columns = ["Program", "Category", "Active Months", "Total Visitors"]
+        st.dataframe(prog_summary, use_container_width=True, hide_index=True)
+        st.caption(
+            "Active Months = months with ticket sales in the selected year. "
+            "Actual run dates require a direct programming calendar export."
+        )
     else:
-        st.info(f"No programs found for {selected_year}.")
+        st.info(f"No program data found for {selected_year}.")
 
 # ---------------------------------------------------------------------------
 # Section 5: Planning Insight Summary

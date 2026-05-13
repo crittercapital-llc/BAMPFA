@@ -564,7 +564,12 @@ class DataAgent:
     # ------------------------------------------------------------------
 
     def get_almanac_events(self) -> pd.DataFrame:
-        """Exhibitions and film programs derived from transaction data."""
+        """
+        Returns exhibitions and film programs with their active months.
+        Because the demo data has every program spanning the full dataset,
+        we use the monthly footprint (which months each program had ticket
+        sales) rather than first/last date ranges.
+        """
         df = self.transactions.copy()
         events = (
             df.groupby(["event_name", "event_category"])
@@ -574,11 +579,27 @@ class DataAgent:
                 total_visitors=("quantity", "sum"),
                 total_revenue=("revenue", "sum"),
                 avg_ticket=("ticket_price", "mean"),
+                active_months=("year_month", "nunique"),
             )
             .reset_index()
         )
         events["duration_days"] = (events["last_date"] - events["first_date"]).dt.days + 1
         return events.sort_values("first_date")
+
+    def get_program_monthly_footprint(self) -> pd.DataFrame:
+        """
+        Returns a month × program presence matrix: which programs had ticket
+        sales in each month. This is the reliable measure of program activity
+        from the available transaction data.
+        """
+        df = self.transactions.copy()
+        df["year_month_str"] = df["year_month"].astype(str)
+        footprint = (
+            df.groupby(["year_month_str", "event_name", "event_category"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        return footprint.sort_values(["year_month_str", "event_name"])
 
     @staticmethod
     def get_bay_area_school_terms() -> list:
@@ -671,138 +692,158 @@ class DataAgent:
         return monthly.sort_values("year_month_str")
 
     # ------------------------------------------------------------------
-    # Visitor Flow / Guest Flow methods
+    # Cross-visitation methods (real patron-level data)
     # ------------------------------------------------------------------
 
-    def get_gallery_flow_data(self) -> pd.DataFrame:
+    def get_visitor_segments(self) -> pd.DataFrame:
         """
-        Simulates gallery-level visitor flow based on transaction data.
-        BAMPFA spaces: G1 (main), G2, G3, G4, Cinema, Film Study Center.
-        Proportions are calibrated to typical art-museum traffic splits.
-        ⚠ Replace with sensor/WiFi dwell-time data when available.
+        Classifies every patron by visitation pattern:
+          cross    — attended both Art (gallery) and Film events
+          art_only — gallery only
+          film_only — film only
+        Returns one row per patron with engagement metrics.
         """
-        import numpy as np
+        df = self.transactions.copy()
+        art_ids = set(df[df["event_category"] == "Art"]["patron_id"])
+        film_ids = set(df[df["event_category"] == "Film"]["patron_id"])
 
-        rng = np.random.default_rng(42)
-        monthly = (
-            self.transactions.groupby("year_month")
-            .agg(total_visitors=("quantity", "sum"))
-            .reset_index()
-        )
-        monthly["year_month_str"] = monthly["year_month"].astype(str)
+        def segment(pid):
+            in_art = pid in art_ids
+            in_film = pid in film_ids
+            if in_art and in_film:
+                return "Cross-Visitor (Art + Film)"
+            elif in_art:
+                return "Art / Gallery Only"
+            else:
+                return "Film Only"
 
-        gallery_weights = {
-            "G1 (Main Gallery)": 0.35,
-            "G2 (Modern/Contemporary)": 0.18,
-            "G3 (Works on Paper)": 0.12,
-            "G4 (Rotating)": 0.10,
-            "Cinema": 0.16,
-            "Film Study Center": 0.09,
-        }
-        avg_dwell = {
-            "G1 (Main Gallery)": 28,
-            "G2 (Modern/Contemporary)": 18,
-            "G3 (Works on Paper)": 14,
-            "G4 (Rotating)": 12,
-            "Cinema": 95,
-            "Film Study Center": 22,
-        }
-
-        rows = []
-        for _, row in monthly.iterrows():
-            total = row["total_visitors"]
-            for gallery, weight in gallery_weights.items():
-                visitors = int(total * weight * rng.uniform(0.92, 1.08))
-                dwell = avg_dwell[gallery] + rng.normal(0, 3)
-                rows.append({
-                    "year_month_str": row["year_month_str"],
-                    "year_month": row["year_month"],
-                    "gallery": gallery,
-                    "visitors": max(0, visitors),
-                    "avg_dwell_minutes": max(1, round(float(dwell), 1)),
-                })
-        return pd.DataFrame(rows).sort_values(["year_month_str", "gallery"])
-
-    def get_hourly_flow(self) -> pd.DataFrame:
-        """
-        Simulated average hourly visitor counts by day-of-week for the last 12 months.
-        BAMPFA hours: Wed–Sun 11am–7pm.
-        ⚠ Replace with actual door-counter or timed-ticket data when available.
-        """
-        import numpy as np
-
-        rng = np.random.default_rng(7)
-        hours = list(range(11, 20))
-        days = ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        peak_hour = {h: max(0, 1 - abs(h - 14) * 0.18) for h in hours}
-        day_multiplier = {
-            "Wednesday": 0.65, "Thursday": 0.70, "Friday": 0.85,
-            "Saturday": 1.40, "Sunday": 1.20,
-        }
-        rows = []
-        base = 45
-        for day in days:
-            for h in hours:
-                avg = base * day_multiplier[day] * peak_hour[h]
-                rows.append({
-                    "day": day,
-                    "hour": h,
-                    "hour_label": f"{h}:00",
-                    "avg_visitors": max(0, int(avg + rng.normal(0, 3))),
-                })
-        return pd.DataFrame(rows)
-
-    def get_dwell_time_summary(self) -> pd.DataFrame:
-        """Returns dwell time stats per gallery aggregated over all months."""
-        flow = self.get_gallery_flow_data()
-        summary = (
-            flow.groupby("gallery")
+        patron_stats = (
+            df.groupby("patron_id")
             .agg(
-                avg_dwell=("avg_dwell_minutes", "mean"),
-                total_visitors=("visitors", "sum"),
+                total_visits=("transaction_id", "count"),
+                total_spend=("revenue", "sum"),
+                is_member=("is_member", "max"),
+                online_pct=("channel", lambda x: round((x == "Online").mean() * 100, 1)),
+                avg_ticket_price=("ticket_price", "mean"),
+                first_visit=("event_date", "min"),
+                last_visit=("event_date", "max"),
             )
             .reset_index()
         )
-        summary["avg_dwell"] = summary["avg_dwell"].round(1)
-        return summary.sort_values("total_visitors", ascending=False)
+        patron_stats["segment"] = patron_stats["patron_id"].apply(segment)
+        patron_stats["avg_spend_per_visit"] = (
+            patron_stats["total_spend"] / patron_stats["total_visits"]
+        ).round(2)
+        return patron_stats
+
+    def get_cross_visitation_summary(self) -> pd.DataFrame:
+        """Segment-level summary: visit frequency, spend, membership rate."""
+        patron_stats = self.get_visitor_segments()
+        summary = (
+            patron_stats.groupby("segment")
+            .agg(
+                patrons=("patron_id", "count"),
+                avg_visits=("total_visits", "mean"),
+                avg_spend_per_visit=("avg_spend_per_visit", "mean"),
+                member_rate=("is_member", "mean"),
+                online_pct=("online_pct", "mean"),
+                avg_ticket_price=("avg_ticket_price", "mean"),
+            )
+            .reset_index()
+        )
+        summary["avg_visits"] = summary["avg_visits"].round(1)
+        summary["avg_spend_per_visit"] = summary["avg_spend_per_visit"].round(2)
+        summary["member_rate"] = (summary["member_rate"] * 100).round(1)
+        summary["online_pct"] = summary["online_pct"].round(1)
+        summary["avg_ticket_price"] = summary["avg_ticket_price"].round(2)
+        return summary.sort_values("patrons", ascending=False)
+
+    def get_cross_visitation_by_month(self) -> pd.DataFrame:
+        """Monthly visitor counts split by segment."""
+        df = self.transactions.copy()
+        patron_segments = self.get_visitor_segments()[["patron_id", "segment"]]
+        df = df.merge(patron_segments, on="patron_id", how="left")
+        grouped = (
+            df.groupby(["year_month", "segment"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        grouped["year_month_str"] = grouped["year_month"].astype(str)
+        return grouped.sort_values("year_month_str")
+
+    def get_gallery_traffic_by_month(self) -> pd.DataFrame:
+        """
+        Monthly visitor counts by venue (Cinema / G1 / G2 / Outdoor) from
+        the actual gallery column in the transaction data — real data only.
+        """
+        df = self.transactions.copy()
+        grouped = (
+            df.groupby(["year_month", "gallery"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        grouped["year_month_str"] = grouped["year_month"].astype(str)
+        return grouped.sort_values("year_month_str")
+
+    def get_day_of_week_attendance(self) -> pd.DataFrame:
+        """Real average daily visitors by day of week from transaction data."""
+        df = self.transactions.copy()
+        daily = (
+            df.groupby(["event_date", "day_of_week"])["quantity"]
+            .sum()
+            .reset_index()
+        )
+        summary = (
+            daily.groupby("day_of_week")["quantity"]
+            .agg(avg_visitors="mean", total_visitors="sum", days="count")
+            .reset_index()
+        )
+        summary["avg_visitors"] = summary["avg_visitors"].round(1)
+        day_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        summary["day_of_week"] = pd.Categorical(
+            summary["day_of_week"], categories=day_order, ordered=True
+        )
+        return summary.sort_values("day_of_week")
 
     # ------------------------------------------------------------------
-    # Spend Analysis methods
+    # Spend Analysis methods (ticket revenue only — real data)
     # ------------------------------------------------------------------
 
-    def get_spend_breakdown(self) -> pd.DataFrame:
-        """
-        Monthly revenue breakdown across tickets, F&B (café), and retail (gift shop).
-        F&B and retail are simulated at typical cultural-institution per-capita rates.
-        F&B: ~$4.50/visitor  |  Retail: ~$7.20/visitor
-        ⚠ Replace with actual POS export from café and gift shop when available.
-        """
+    def get_ticket_revenue_by_month(self) -> pd.DataFrame:
+        """Monthly ticket revenue and per-capita spend from real transaction data."""
         import numpy as np
 
-        rng = np.random.default_rng(99)
+        df = self.transactions.copy()
         monthly = (
-            self.transactions.groupby("year_month")
+            df.groupby("year_month")
             .agg(
                 ticket_revenue=("revenue", "sum"),
                 visitors=("quantity", "sum"),
+                transactions=("transaction_id", "count"),
+                avg_ticket_price=("ticket_price", "mean"),
             )
             .reset_index()
         )
         monthly["year_month_str"] = monthly["year_month"].astype(str)
-
-        monthly["fb_revenue"] = (
-            monthly["visitors"] * rng.uniform(3.8, 5.2, len(monthly))
-        ).round(2)
-        monthly["retail_revenue"] = (
-            monthly["visitors"] * rng.uniform(5.5, 9.0, len(monthly))
-        ).round(2)
-        monthly["total_revenue"] = (
-            monthly["ticket_revenue"] + monthly["fb_revenue"] + monthly["retail_revenue"]
-        ).round(2)
-        monthly["per_capita_total"] = (
-            monthly["total_revenue"] / monthly["visitors"].replace(0, np.nan)
+        monthly["per_capita_ticket"] = (
+            monthly["ticket_revenue"] / monthly["visitors"].replace(0, np.nan)
         ).round(2)
         return monthly.sort_values("year_month_str")
+
+    def get_revenue_by_gallery(self) -> pd.DataFrame:
+        """Ticket revenue and visitors split by venue (Cinema / G1 / G2 / Outdoor)."""
+        df = self.transactions.copy()
+        grouped = (
+            df.groupby(["year_month", "gallery"])
+            .agg(
+                revenue=("revenue", "sum"),
+                visitors=("quantity", "sum"),
+                avg_ticket=("ticket_price", "mean"),
+            )
+            .reset_index()
+        )
+        grouped["year_month_str"] = grouped["year_month"].astype(str)
+        return grouped.sort_values("year_month_str")
 
     def get_per_capita_spend_by_segment(self) -> pd.DataFrame:
         """Per-capita ticket spend broken down by member status and channel."""
